@@ -122,7 +122,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        'flex flex-col border-r bg-card transition-all duration-300',
+        'flex flex-col border-r bg-card transition-all duration-300 overflow-x-hidden',
         collapsed ? 'w-16' : 'w-64'
       )}
     >

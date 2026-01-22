@@ -24,32 +24,32 @@ export function DataTable<T extends { id: string }>({
   actions,
 }: DataTableProps<T>) {
   return (
-    <div className="overflow-hidden rounded-lg border bg-white">
+    <div className="overflow-hidden rounded-lg border bg-card">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="border-b bg-gray-50">
+          <thead className="border-b bg-muted/40">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground"
                 >
                   {column.title}
                 </th>
               ))}
               {(onEdit || onDelete || actions) && (
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   操作
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-border">
             {loading ? (
               <tr>
                 <td
                   colSpan={columns.length + 1}
-                  className="px-6 py-8 text-center text-gray-500"
+                  className="px-6 py-8 text-center text-muted-foreground"
                 >
                   加载中...
                 </td>
@@ -58,16 +58,16 @@ export function DataTable<T extends { id: string }>({
               <tr>
                 <td
                   colSpan={columns.length + 1}
-                  className="px-6 py-8 text-center text-gray-500"
+                  className="px-6 py-8 text-center text-muted-foreground"
                 >
                   暂无数据
                 </td>
               </tr>
             ) : (
               data.map((record) => (
-                <tr key={record.id} className="hover:bg-gray-50">
+                <tr key={record.id} className="hover:bg-muted/50 transition-colors">
                   {columns.map((column) => (
-                    <td key={column.key} className="px-6 py-4 text-sm text-gray-900">
+                    <td key={column.key} className="px-6 py-4 text-sm text-foreground">
                       {column.render
                         ? column.render((record as any)[column.key], record)
                         : (record as any)[column.key]}
@@ -82,7 +82,7 @@ export function DataTable<T extends { id: string }>({
                           {onEdit && (
                             <button
                               onClick={() => onEdit(record)}
-                              className="rounded p-1 text-blue-600 hover:bg-blue-50"
+                              className="rounded p-1 text-primary hover:bg-primary/10 transition-colors"
                               title="编辑"
                             >
                               <Pencil className="h-4 w-4" />
@@ -91,7 +91,7 @@ export function DataTable<T extends { id: string }>({
                           {onDelete && (
                             <button
                               onClick={() => onDelete(record)}
-                              className="rounded p-1 text-red-600 hover:bg-red-50"
+                              className="rounded p-1 text-destructive hover:bg-destructive/10 transition-colors"
                               title="删除"
                             >
                               <Trash2 className="h-4 w-4" />

@@ -34,7 +34,7 @@ export function TabBar() {
   }
 
   return (
-    <div className="flex items-center gap-2 border-b bg-gray-50 px-4 py-2">
+    <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-2">
       <div className="flex flex-1 items-center gap-1 overflow-x-auto">
         {tabs.map((tab) => (
           <div
@@ -43,15 +43,15 @@ export function TabBar() {
             className={cn(
               'group relative flex cursor-pointer items-center gap-2 rounded-t-lg px-4 py-2 text-sm transition-colors',
               activeTabId === tab.id
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-background text-primary shadow-sm'
+                : 'text-muted-foreground hover:bg-muted/60'
             )}
           >
             <span className="whitespace-nowrap">{tab.title}</span>
             {tab.closable && (
               <button
                 onClick={(e) => handleCloseTab(tab.id, e)}
-                className="rounded p-0.5 opacity-0 hover:bg-gray-200 group-hover:opacity-100"
+                className="rounded p-0.5 opacity-0 hover:bg-muted group-hover:opacity-100 transition-opacity"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -63,21 +63,21 @@ export function TabBar() {
       {/* 更多操作 */}
       {tabs.length > 0 && (
         <div className="group relative">
-          <button className="rounded p-2 hover:bg-gray-200">
+          <button className="rounded p-2 hover:bg-muted">
             <MoreVertical className="h-4 w-4" />
           </button>
 
           {/* 下拉菜单 */}
-          <div className="absolute right-0 top-full z-10 mt-1 hidden w-32 rounded-lg border bg-white py-1 shadow-lg group-hover:block">
+          <div className="absolute right-0 top-full z-10 mt-1 hidden w-32 rounded-lg border bg-popover py-1 shadow-lg group-hover:block">
             <button
               onClick={() => activeTabId && closeOtherTabs(activeTabId)}
-              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+              className="w-full px-4 py-2 text-left text-sm hover:bg-muted"
             >
               关闭其他
             </button>
             <button
               onClick={closeAllTabs}
-              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+              className="w-full px-4 py-2 text-left text-sm hover:bg-muted"
             >
               关闭所有
             </button>

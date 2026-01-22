@@ -47,21 +47,21 @@ function TreeNodeItem({
     <div>
       <div
         className={cn(
-          "group flex items-center gap-2 rounded px-2 py-1.5 hover:bg-gray-100",
-          selectedId === node.id && "bg-blue-50"
+          "group flex items-center gap-2 rounded px-2 py-1.5 hover:bg-muted/50 transition-colors",
+          selectedId === node.id && "bg-muted"
         )}
         style={{ paddingLeft: `${level * 20 + 8}px` }}
       >
         {/* Expand/Collapse Icon */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex h-5 w-5 items-center justify-center"
+          className="flex h-5 w-5 items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
         >
           {hasChildren ? (
             expanded ? (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className="h-4 w-4" />
             ) : (
-              <ChevronRight className="h-4 w-4 text-gray-500" />
+              <ChevronRight className="h-4 w-4" />
             )
           ) : (
             <span className="w-4" />
@@ -70,9 +70,9 @@ function TreeNodeItem({
 
         {/* Folder Icon */}
         {expanded ? (
-          <FolderOpen className="h-4 w-4 text-blue-500" />
+          <FolderOpen className="h-4 w-4 text-primary" />
         ) : (
-          <Folder className="h-4 w-4 text-gray-500" />
+          <Folder className="h-4 w-4 text-muted-foreground" />
         )}
 
         {/* Node Name */}
@@ -82,12 +82,12 @@ function TreeNodeItem({
         >
           {node.name}
           {node.code && (
-            <span className="ml-2 text-xs text-gray-400">({node.code})</span>
+            <span className="ml-2 text-xs text-muted-foreground">({node.code})</span>
           )}
         </span>
 
         {/* Action Buttons */}
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           {onAdd && (
             <Button
               variant="ghost"
@@ -96,7 +96,7 @@ function TreeNodeItem({
                 e.stopPropagation()
                 onAdd(node)
               }}
-              className="h-6 w-6 p-0"
+              className="h-6 w-6 p-0 hover:bg-background"
             >
               <Plus className="h-3 w-3" />
             </Button>
@@ -109,7 +109,7 @@ function TreeNodeItem({
                 e.stopPropagation()
                 onEdit(node)
               }}
-              className="h-6 w-6 p-0"
+              className="h-6 w-6 p-0 hover:bg-background"
             >
               <Edit className="h-3 w-3" />
             </Button>
@@ -122,7 +122,7 @@ function TreeNodeItem({
                 e.stopPropagation()
                 onDelete(node)
               }}
-              className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
+              className="h-6 w-6 p-0 text-destructive hover:bg-background hover:text-destructive"
             >
               <Trash2 className="h-3 w-3" />
             </Button>
@@ -160,9 +160,9 @@ export function TreeView({
   onSelect
 }: TreeViewProps) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-2">
+    <div className="rounded-lg border border-border bg-card p-2 text-card-foreground">
       {data.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">
+        <div className="py-8 text-center text-sm text-muted-foreground">
           暂无数据
         </div>
       ) : (

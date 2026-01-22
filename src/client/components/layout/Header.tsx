@@ -2,6 +2,7 @@ import { useUserStore } from '@/client/stores/userStore'
 import { useNavigate } from 'react-router-dom'
 import { LogOut, User, Settings } from 'lucide-react'
 import { Button } from '@/client/components/ui/button'
+import { ModeToggle } from '@/client/components/mode-toggle'
 
 export function Header() {
   const navigate = useNavigate()
@@ -23,6 +24,9 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-4">
+        {/* 主题切换 */}
+        <ModeToggle />
+        
         {/* 用户信息下拉菜单 */}
         <div className="group relative">
           <Button variant="ghost" className="flex items-center gap-2 rounded-lg px-3 py-2">
