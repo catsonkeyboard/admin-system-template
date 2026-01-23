@@ -98,8 +98,8 @@ export function RoleFormDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-6 px-6 py-4">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">角色名称 *</Label>
                 <Input

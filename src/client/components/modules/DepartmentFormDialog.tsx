@@ -136,8 +136,8 @@ export function DepartmentFormDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
+          <div className="space-y-6 px-6 py-4">
+            <div className="space-y-4">
               <Label htmlFor="name">部门名称 *</Label>
               <Input
                 id="name"

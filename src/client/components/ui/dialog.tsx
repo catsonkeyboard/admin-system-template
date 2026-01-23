@@ -71,7 +71,7 @@ interface DialogFooterProps {
 }
 
 const DialogFooter: React.FC<DialogFooterProps> = ({ children }) => {
-  return <div className="flex items-center p-6 pt-0">{children}</div>
+  return <div className="flex justify-end gap-2 p-6 pt-0">{children}</div>
 }
 
 const DialogClose: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({

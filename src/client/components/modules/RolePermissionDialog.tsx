@@ -140,7 +140,7 @@ export function RolePermissionDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="overflow-y-auto py-4" style={{ maxHeight: 'calc(90vh - 180px)' }}>
+        <div className="overflow-y-auto px-6 py-4" style={{ maxHeight: 'calc(90vh - 180px)' }}>
           {/* 统计信息 */}
           <div className="mb-4 flex items-center justify-between rounded-lg bg-blue-50 p-3">
             <div className="text-sm">
