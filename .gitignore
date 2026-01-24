@@ -42,3 +42,5 @@ prisma/migrations/
 
 # Environment variables
 .env
+
+.claude

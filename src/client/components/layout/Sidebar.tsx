@@ -103,19 +103,19 @@ export function Sidebar() {
     const active = isActive(item.path)
 
     return (
-      <div key={item.id}>
+      <div key={item.id} className="overflow-hidden">
         <button
           onClick={() => handleMenuClick(item)}
           className={cn(
-            'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors duration-150',
+            'flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-all duration-200 cursor-pointer overflow-hidden',
             level > 0 && 'ml-4',
             active
-              ? 'bg-accent/10 text-accent font-medium'
-              : 'text-foreground hover:bg-accent/10'
+              ? 'bg-primary text-primary-foreground font-medium shadow-sm'
+              : 'text-foreground hover:bg-accent/10 hover:text-accent'
           )}
         >
-          {getIcon(item.icon)}
-          {!collapsed && <span className="flex-1 text-left">{item.name}</span>}
+          <span className="flex-shrink-0">{getIcon(item.icon)}</span>
+          {!collapsed && <span className="flex-1 text-left truncate">{item.name}</span>}
         </button>
         {!collapsed && hasChildren && (
           <div className="mt-1 space-y-1">
@@ -129,35 +129,35 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        'flex flex-col border-r border-border bg-card transition-all duration-300 overflow-x-hidden',
+        'flex flex-col border-r border-border bg-card transition-all duration-300 overflow-hidden',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
-      {/* Logo */}
-      <div className="flex h-16 items-center justify-center border-b border-border px-4">
-        <h1 className={cn('font-bold text-lg text-accent', collapsed && 'text-xs')}>
+      {/* Logo - Enterprise Style */}
+      <div className="flex h-14 items-center justify-center border-b border-border bg-primary/5 px-4 overflow-hidden">
+        <h1 className={cn('font-bold text-base text-primary truncate', collapsed && 'text-xs')}>
           {collapsed ? 'A' : 'Admin'}
         </h1>
       </div>
 
       {/* Menu */}
-      <div className="flex-1 overflow-y-auto p-2">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden p-2">
         {menuItems.map((item) => renderMenuItem(item))}
       </div>
 
       {/* Collapse button */}
-      <div className="border-t border-border p-2">
+      <div className="border-t border-border p-2 overflow-hidden">
         <Button
           variant="ghost"
           onClick={toggleCollapsed}
-          className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm"
+          className="flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent/10"
         >
           {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 flex-shrink-0" />
           ) : (
             <>
-              <ChevronLeft className="h-4 w-4" />
-              <span>收起</span>
+              <ChevronLeft className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">收起</span>
             </>
           )}
         </Button>

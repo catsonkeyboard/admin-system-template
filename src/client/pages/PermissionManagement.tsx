@@ -182,13 +182,20 @@ export function PermissionManagement() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>权限管理</CardTitle>
-          <CardDescription>管理系统权限，配置菜单、按钮和数据访问权限</CardDescription>
-          <div className="flex justify-end">
-            <Button onClick={handleCreate}>
-              <Plus className="mr-2 h-4 w-4" />
-              新建权限
-            </Button>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle>权限管理</CardTitle>
+              <CardDescription>管理系统权限，配置菜单、按钮和数据访问权限</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+              <Button onClick={handleCreate}>
+                <Plus className="mr-2 h-4 w-4" />
+                新建权限
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -215,8 +222,8 @@ export function PermissionManagement() {
           )}
 
           {/* 搜索栏 */}
-          <div className="mb-4 flex gap-2">
-            <div className="relative flex-1 max-w-md">
+          <div className="mb-4">
+            <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="搜索权限名称、代码"
@@ -225,10 +232,6 @@ export function PermissionManagement() {
                 className="pl-10"
               />
             </div>
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              刷新
-            </Button>
           </div>
 
           {/* 表格 */}

@@ -33,24 +33,24 @@ export function TabBar() {
   }
 
   return (
-    <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-4 py-2">
+    <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-4 py-1.5">
       <div className="flex flex-1 items-center gap-1 overflow-x-auto">
         {tabs.map((tab) => (
           <div
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
             className={cn(
-              'group relative flex cursor-pointer items-center gap-2 rounded-t-lg px-4 py-2 text-sm transition-colors duration-150',
+              'group relative flex cursor-pointer items-center gap-2 rounded-t-md px-4 py-2 text-sm transition-all duration-200 border-t border-x',
               activeTabId === tab.id
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-primary text-primary-foreground border-primary font-medium shadow-sm'
+                : 'text-muted-foreground border-transparent hover:text-foreground hover:bg-foreground/5'
             )}
           >
             <span className="whitespace-nowrap">{tab.title}</span>
             {tab.closable && (
               <button
                 onClick={(e) => handleCloseTab(tab.id, e)}
-                className="rounded p-0.5 opacity-0 hover:bg-foreground/[0.07] group-hover:opacity-100 transition-opacity"
+                className="rounded p-0.5 opacity-0 hover:bg-accent/10 group-hover:opacity-100 transition-opacity"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -61,20 +61,20 @@ export function TabBar() {
 
       {tabs.length > 0 && (
         <div className="group relative">
-          <button className="rounded p-2 hover:bg-foreground/[0.07]">
+          <button className="rounded p-2 hover:bg-accent/10 transition-colors cursor-pointer">
             <MoreVertical className="h-4 w-4" />
           </button>
 
-          <div className="absolute right-0 top-full z-10 mt-1 hidden w-32 rounded-lg border border-border bg-popover py-1 shadow-lg group-hover:block">
+          <div className="absolute right-0 top-full z-10 mt-1 hidden w-32 rounded-md border border-border bg-popover py-1 shadow-lg group-hover:block">
             <button
               onClick={() => activeTabId && closeOtherTabs(activeTabId)}
-              className="w-full px-4 py-2 text-left text-sm hover:bg-foreground/[0.07]"
+              className="w-full px-4 py-2 text-left text-sm hover:bg-accent/10 transition-colors cursor-pointer"
             >
               关闭其他
             </button>
             <button
               onClick={closeAllTabs}
-              className="w-full px-4 py-2 text-left text-sm hover:bg-foreground/[0.07]"
+              className="w-full px-4 py-2 text-left text-sm hover:bg-accent/10 transition-colors cursor-pointer"
             >
               关闭所有
             </button>

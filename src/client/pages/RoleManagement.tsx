@@ -157,15 +157,22 @@ export function RoleManagement() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>角色管理</CardTitle>
-          <CardDescription>管理系统角色，配置角色权限</CardDescription>
-          <div className="flex justify-end">
-            <PermissionGuard permission="role:create">
-              <Button onClick={handleCreate}>
-                <Plus className="mr-2 h-4 w-4" />
-                新建角色
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle>角色管理</CardTitle>
+              <CardDescription>管理系统角色，配置角色权限</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCw className="h-4 w-4" />
               </Button>
-            </PermissionGuard>
+              <PermissionGuard permission="role:create">
+                <Button onClick={handleCreate}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  新建角色
+                </Button>
+              </PermissionGuard>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -192,8 +199,8 @@ export function RoleManagement() {
           )}
 
           {/* 搜索栏 */}
-          <div className="mb-4 flex gap-2">
-            <div className="relative flex-1 max-w-md">
+          <div className="mb-4">
+            <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="搜索角色名称、代码"
@@ -202,10 +209,6 @@ export function RoleManagement() {
                 className="pl-10"
               />
             </div>
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              刷新
-            </Button>
           </div>
 
           {/* 表格 */}

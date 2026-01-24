@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
+/* Enterprise Dashboard Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* =============================================================================
@@ -59,91 +62,101 @@
 ============================================================================= */
 
 :root {
-  /* === 6 BASE COLORS (Light Mode) === */
-  --background: oklch(0.98 0.003 265);
-  --foreground: oklch(0.185 0.01 270);
-  --foreground-rgb: 38, 36, 42;
-  --accent: oklch(0.62 0.13 293);
-  --accent-rgb: 104, 78, 133;
-  --info: oklch(0.75 0.16 70);
-  --info-rgb: 180, 120, 40;
-  --success: oklch(0.55 0.17 145);
-  --success-rgb: 34, 120, 60;
-  --destructive: oklch(0.58 0.24 28);
-  --destructive-rgb: 180, 60, 50;
+  /* === 6 BASE COLORS (Light Mode) - Enterprise/Government Style === */
+  --background: oklch(0.98 0.002 265);
+  --foreground: oklch(0.15 0.02 265);
+  --foreground-rgb: 15, 23, 42;
+  --accent: oklch(0.52 0.14 250);
+  --accent-rgb: 3, 105, 161;
+  --info: oklch(0.72 0.14 85);
+  --info-rgb: 217, 119, 6;
+  --success: oklch(0.58 0.17 145);
+  --success-rgb: 22, 101, 52;
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-rgb: 220, 38, 38;
 
   /* === SHADOW OPACITY === */
-  --shadow-border-opacity: 0.08;
-  --shadow-blur-opacity: 0.06;
+  --shadow-border-opacity: 0.12;
+  --shadow-blur-opacity: 0.08;
 
-  /* === SHADOW VALUES === */
+  /* === SHADOW VALUES - Enterprise Style === */
   --shadow-minimal:
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-    rgba(var(--foreground-rgb), 0.06) 0px 0px 0px 1px,
-    rgba(0, 0, 0, var(--shadow-blur-opacity)) 0px 1px 1px -0.5px,
-    rgba(0, 0, 0, var(--shadow-blur-opacity)) 0px 3px 3px -1.5px;
+    rgba(var(--foreground-rgb), 0.08) 0px 0px 0px 1px,
+    rgba(0, 0, 0, var(--shadow-blur-opacity)) 0px 1px 2px -0.5px,
+    rgba(0, 0, 0, var(--shadow-blur-opacity)) 0px 2px 4px -1px;
 
   --shadow-modal-small:
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-    rgba(var(--foreground-rgb), 0.06) 0px 0px 0px 1px,
-    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.67)) 0px 1px 1px -0.5px,
-    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.67)) 0px 3px 3px 0px,
-    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.33)) 0px 6px 6px 0px,
-    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.33)) 0px 12px 12px 0px,
-    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.33)) 0px 24px 24px 0px;
+    rgba(var(--foreground-rgb), 0.08) 0px 0px 0px 1px,
+    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.75)) 0px 2px 4px -1px,
+    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.75)) 0px 4px 8px -1px,
+    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.5)) 0px 8px 16px -2px,
+    rgba(0, 0, 0, calc(var(--shadow-blur-opacity) * 0.5)) 0px 16px 32px -2px;
 
   /* === MIX VARIANTS === */
   --foreground-5: color-mix(in srgb, var(--foreground) 5%, var(--background));
   --foreground-10: color-mix(in srgb, var(--foreground) 10%, var(--background));
   --foreground-50: color-mix(in srgb, var(--foreground) 50%, var(--background));
 
-  /* === SHADCN VARS === */
-  --card: var(--background);
+  /* === SHADCN VARS - Enterprise Style === */
+  --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
-  --popover: var(--background);
+  --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
-  --primary: var(--foreground);
-  --primary-foreground: var(--background);
-  --secondary: var(--foreground-5);
-  --secondary-foreground: var(--foreground);
-  --muted: var(--foreground-5);
-  --muted-foreground: var(--foreground-50);
-  --accent-foreground: var(--background);
-  --destructive-foreground: var(--background);
-  --border: color-mix(in srgb, var(--foreground) 5%, transparent);
-  --input: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --ring: oklch(from var(--foreground) l c h / 0.25);
-  --radius: 0.5rem;
+  --primary: oklch(0.45 0.12 250);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0.005 265);
+  --secondary-foreground: oklch(0.25 0.015 265);
+  --muted: oklch(0.96 0.003 265);
+  --muted-foreground: oklch(0.50 0.015 265);
+  --accent-foreground: oklch(1 0 0);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.90 0.005 265);
+  --input: oklch(0.85 0.005 265);
+  --ring: oklch(0.52 0.14 250 / 0.4);
+  --radius: 0.375rem;
 
-  /* Font settings */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Font settings - Enterprise Dashboard */
+  --font-sans: "Fira Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .dark {
-  /* === 6 BASE COLORS (Dark Mode) === */
-  --background: oklch(0.2 0.005 270);
-  --foreground: oklch(0.92 0.005 270);
-  --foreground-rgb: 227, 226, 229;
-  --accent: oklch(0.68 0.13 293);
-  --accent-rgb: 118, 92, 147;
-  --info: oklch(0.70 0.16 70);
-  --info-rgb: 200, 140, 60;
-  --success: oklch(0.60 0.17 145);
-  --success-rgb: 50, 140, 80;
-  --destructive: oklch(0.70 0.19 22);
-  --destructive-rgb: 200, 80, 70;
+  /* === 6 BASE COLORS (Dark Mode) - Enterprise/Government Style === */
+  --background: oklch(0.22 0.01 265);
+  --foreground: oklch(0.95 0.005 265);
+  --foreground-rgb: 248, 250, 252;
+  --accent: oklch(0.60 0.14 250);
+  --accent-rgb: 14, 165, 233;
+  --info: oklch(0.75 0.14 85);
+  --info-rgb: 251, 146, 60;
+  --success: oklch(0.65 0.17 145);
+  --success-rgb: 74, 222, 128;
+  --destructive: oklch(0.65 0.20 25);
+  --destructive-rgb: 248, 113, 113;
 
   /* === MIX VARIANTS === */
   --foreground-5: color-mix(in srgb, var(--foreground) 5%, var(--background));
   --foreground-10: color-mix(in srgb, var(--foreground) 10%, var(--background));
   --foreground-50: color-mix(in srgb, var(--foreground) 50%, var(--background));
 
-  --border: color-mix(in srgb, var(--foreground) 5%, transparent);
-  --input: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --ring: oklch(from var(--foreground) l c h / 0.25);
+  /* === SHADCN VARS - Dark Mode Enterprise === */
+  --card: oklch(0.26 0.01 265);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.26 0.01 265);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.60 0.14 250);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.30 0.01 265);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.28 0.01 265);
+  --muted-foreground: oklch(0.60 0.01 265);
+  --border: oklch(0.35 0.01 265);
+  --input: oklch(0.30 0.01 265);
+  --ring: oklch(0.60 0.14 250 / 0.4);
 }
 
 @theme inline {

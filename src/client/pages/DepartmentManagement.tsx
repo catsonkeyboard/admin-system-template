@@ -122,19 +122,22 @@ export function DepartmentManagement() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>部门管理</CardTitle>
-          <CardDescription>管理组织架构，配置部门层级关系</CardDescription>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              刷新
-            </Button>
-            <PermissionGuard permission="dept:create">
-              <Button onClick={handleCreate}>
-                <Plus className="mr-2 h-4 w-4" />
-                新建部门
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle>部门管理</CardTitle>
+              <CardDescription>管理组织架构，配置部门层级关系</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCw className="h-4 w-4" />
               </Button>
-            </PermissionGuard>
+              <PermissionGuard permission="dept:create">
+                <Button onClick={handleCreate}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  新建部门
+                </Button>
+              </PermissionGuard>
+            </div>
           </div>
         </CardHeader>
         <CardContent>

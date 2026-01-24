@@ -117,21 +117,28 @@ export function UserManagement() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>用户管理</CardTitle>
-          <CardDescription>管理系统用户，配置角色和权限</CardDescription>
-          <div className="flex justify-end">
-            <PermissionGuard permission="user:create">
-              <Button onClick={handleCreate}>
-                <Plus className="mr-2 h-4 w-4" />
-                新建用户
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle>用户管理</CardTitle>
+              <CardDescription>管理系统用户，配置角色和权限</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCw className="h-4 w-4" />
               </Button>
-            </PermissionGuard>
+              <PermissionGuard permission="user:create">
+                <Button onClick={handleCreate}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  新建用户
+                </Button>
+              </PermissionGuard>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
           {/* 搜索栏 */}
-          <div className="mb-4 flex gap-2">
-            <div className="relative flex-1 max-w-md">
+          <div className="mb-4">
+            <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="搜索用户名、姓名、手机号"
@@ -140,10 +147,6 @@ export function UserManagement() {
                 className="pl-10"
               />
             </div>
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              刷新
-            </Button>
           </div>
 
           {/* 表格 */}

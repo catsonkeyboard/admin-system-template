@@ -12,10 +12,10 @@ const Dialog: React.FC<DialogProps> = ({ open, onOpenChange, children }) => {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 transition-opacity"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         onClick={() => onOpenChange(false)}
       />
       {/* Content */}
@@ -33,7 +33,7 @@ const DialogContent: React.FC<DialogContentProps> = ({ children, className }) =>
   return (
     <div
       className={cn(
-        "w-full max-w-lg rounded-lg border border-border bg-card text-foreground shadow-lg",
+        "w-full max-w-lg rounded-md border border-border bg-card text-card-foreground shadow-lg",
         className
       )}
     >
@@ -55,7 +55,7 @@ interface DialogTitleProps {
 }
 
 const DialogTitle: React.FC<DialogTitleProps> = ({ children }) => {
-  return <h2 className="text-xl font-semibold leading-none tracking-tight">{children}</h2>
+  return <h2 className="text-lg font-semibold leading-none tracking-tight">{children}</h2>
 }
 
 interface DialogDescriptionProps {
@@ -81,7 +81,7 @@ const DialogClose: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
   <button
     type="button"
     className={cn(
-      "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none",
+      "absolute right-4 top-4 rounded-md opacity-70 transition-all hover:opacity-100 hover:bg-accent/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none cursor-pointer",
       className
     )}
     {...props}

@@ -47,7 +47,7 @@ export function Select({
         onClick={() => !disabled && setOpen(!open)}
         disabled={disabled}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:border-accent/50 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
           className
         )}
         {...props}
@@ -69,8 +69,8 @@ export function Select({
                   setOpen(false)
                 }}
                 className={cn(
-                  "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm hover:bg-foreground/[0.07]",
-                  value === option.value && "bg-accent/10 text-accent"
+                  "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent/10",
+                  value === option.value && "bg-accent/15 text-accent font-medium"
                 )}
               >
                 <span>{option.label}</span>

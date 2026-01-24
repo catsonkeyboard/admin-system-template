@@ -153,17 +153,20 @@ export function MenuManagement() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>菜单管理</CardTitle>
-          <CardDescription>管理系统菜单，配置菜单层级和路由</CardDescription>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => refetch()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              刷新
-            </Button>
-            <Button onClick={handleCreate}>
-              <Plus className="mr-2 h-4 w-4" />
-              新建菜单
-            </Button>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle>菜单管理</CardTitle>
+              <CardDescription>管理系统菜单，配置菜单层级和路由</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => refetch()}>
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+              <Button onClick={handleCreate}>
+                <Plus className="mr-2 h-4 w-4" />
+                新建菜单
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
