@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import * as React from 'react'
 
 type Theme = 'light' | 'dark' | 'system'
 type FontFamily = 'inter' | 'system'

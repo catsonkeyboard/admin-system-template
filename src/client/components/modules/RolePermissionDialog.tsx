@@ -93,11 +93,11 @@ export function RolePermissionDialog({
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'MENU':
-        return <Menu className="h-4 w-4 text-blue-600" />
+        return <Menu className="h-4 w-4 text-accent" />
       case 'BUTTON':
-        return <MousePointer className="h-4 w-4 text-green-600" />
+        return <MousePointer className="h-4 w-4 text-success" />
       case 'DATA':
-        return <Database className="h-4 w-4 text-purple-600" />
+        return <Database className="h-4 w-4 text-info" />
       default:
         return null
     }
@@ -142,10 +142,10 @@ export function RolePermissionDialog({
 
         <div className="overflow-y-auto px-6 py-4" style={{ maxHeight: 'calc(90vh - 180px)' }}>
           {/* 统计信息 */}
-          <div className="mb-4 flex items-center justify-between rounded-lg bg-blue-50 p-3">
+          <div className="mb-4 flex items-center justify-between rounded-lg bg-accent/10 p-3">
             <div className="text-sm">
-              <span className="font-medium text-blue-900">已选择: </span>
-              <span className="text-blue-700">{selectedPermissions.length} / {permissionsData?.items.length || 0} 个权限</span>
+              <span className="font-medium text-foreground">已选择: </span>
+              <span className="text-accent">{selectedPermissions.length} / {permissionsData?.items.length || 0} 个权限</span>
             </div>
             <Button
               size="sm"
@@ -159,11 +159,11 @@ export function RolePermissionDialog({
           {/* 按类型分组显示权限 */}
           <div className="space-y-6">
             {Object.entries(groupedPermissions).map(([type, permissions]) => (
-              <div key={type} className="rounded-lg border border-gray-200 p-4">
+              <div key={type} className="rounded-lg border border-border p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {getTypeIcon(type)}
-                    <h3 className="font-semibold text-gray-900">
+                    <h3 className="font-semibold text-foreground">
                       {typeLabels[type as keyof typeof typeLabels]}
                     </h3>
                     <Badge variant={getTypeBadgeVariant(type) as any}>
@@ -185,7 +185,7 @@ export function RolePermissionDialog({
                   {permissions.map((permission) => (
                     <div
                       key={permission.id}
-                      className="flex items-start gap-2 rounded border border-gray-200 p-3 hover:bg-gray-50"
+                      className="flex items-start gap-2 rounded border border-border p-3 hover:bg-foreground/[0.04]"
                     >
                       <Checkbox
                         checked={selectedPermissions.includes(permission.id)}
@@ -193,19 +193,19 @@ export function RolePermissionDialog({
                         className="mt-0.5"
                       />
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-900 text-sm">
+                        <div className="font-medium text-foreground text-sm">
                           {permission.name}
                         </div>
-                        <div className="text-xs text-gray-500 truncate">
+                        <div className="text-xs text-muted-foreground truncate">
                           {permission.code}
                         </div>
                         {permission.menu && (
-                          <div className="mt-1 text-xs text-gray-400">
+                          <div className="mt-1 text-xs text-muted-foreground/70">
                             📋 {permission.menu.name}
                           </div>
                         )}
                         {permission.description && (
-                          <div className="mt-1 text-xs text-gray-500">
+                          <div className="mt-1 text-xs text-muted-foreground">
                             {permission.description}
                           </div>
                         )}
@@ -218,7 +218,7 @@ export function RolePermissionDialog({
           </div>
 
           {permissionsData?.items.length === 0 && (
-            <div className="py-12 text-center text-gray-500">
+            <div className="py-12 text-center text-muted-foreground">
               暂无权限，请先创建权限
             </div>
           )}

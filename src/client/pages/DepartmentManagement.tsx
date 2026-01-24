@@ -150,7 +150,7 @@ export function DepartmentManagement() {
               {isLoading ? (
                 <div className="flex h-96 items-center justify-center rounded-lg border bg-background">
                   <div className="text-center">
-                    <RefreshCw className="mx-auto h-8 w-8 animate-spin text-primary" />
+                    <RefreshCw className="mx-auto h-8 w-8 animate-spin text-accent" />
                     <p className="mt-2 text-sm text-muted-foreground">加载中...</p>
                   </div>
                 </div>
@@ -173,8 +173,8 @@ export function DepartmentManagement() {
                 {selectedDepartment ? (
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 border-b pb-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                        <Building2 className="h-6 w-6 text-primary" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
+                        <Building2 className="h-6 w-6 text-accent" />
                       </div>
                       <div>
                         <h4 className="font-semibold">{selectedDepartment.name}</h4>

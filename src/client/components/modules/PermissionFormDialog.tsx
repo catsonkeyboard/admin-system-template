@@ -141,7 +141,7 @@ export function PermissionFormDialog({
                   placeholder="请输入权限代码（唯一）"
                   disabled={!!formData.id}
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   例如：user:view, user:create, user:edit
                 </p>
               </div>
@@ -157,7 +157,7 @@ export function PermissionFormDialog({
                   value={formData.type}
                   onChange={(value) => setFormData({ ...formData, type: value as 'MENU' | 'BUTTON' | 'DATA' })}
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {formData.type === 'MENU' && '控制菜单是否显示'}
                   {formData.type === 'BUTTON' && '控制按钮是否显示'}
                   {formData.type === 'DATA' && '控制数据访问范围'}
@@ -172,7 +172,7 @@ export function PermissionFormDialog({
                   onChange={(value) => setFormData({ ...formData, menuId: value || undefined })}
                   placeholder="选择关联菜单"
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   可选，关联到具体菜单
                 </p>
               </div>

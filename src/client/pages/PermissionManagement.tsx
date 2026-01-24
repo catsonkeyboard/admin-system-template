@@ -50,11 +50,11 @@ export function PermissionManagement() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'MENU':
-        return <Menu className="h-4 w-4 text-primary" />
+        return <Menu className="h-4 w-4 text-accent" />
       case 'BUTTON':
-        return <MousePointer className="h-4 w-4 text-green-600" />
+        return <MousePointer className="h-4 w-4 text-success" />
       case 'DATA':
-        return <Database className="h-4 w-4 text-purple-600" />
+        return <Database className="h-4 w-4 text-accent" />
       default:
         return <Key className="h-4 w-4 text-muted-foreground" />
     }
@@ -79,7 +79,7 @@ export function PermissionManagement() {
       title: '权限名称',
       render: (name: string, record: any) => (
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
             {getTypeIcon(record.type)}
           </div>
           <div>
@@ -199,17 +199,17 @@ export function PermissionManagement() {
                 <div className="text-2xl font-bold">{stats.total}</div>
                 <div className="text-sm text-muted-foreground">总权限数</div>
               </div>
-              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <div className="text-2xl font-bold text-blue-600">{stats.menu}</div>
-                <div className="text-sm text-blue-600">菜单权限</div>
+              <div className="rounded-lg border bg-info/10 p-4">
+                <div className="text-2xl font-bold text-info">{stats.menu}</div>
+                <div className="text-sm text-info">菜单权限</div>
               </div>
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                <div className="text-2xl font-bold text-green-600">{stats.button}</div>
-                <div className="text-sm text-green-600">按钮权限</div>
+              <div className="rounded-lg border bg-success/10 p-4">
+                <div className="text-2xl font-bold text-success">{stats.button}</div>
+                <div className="text-sm text-success">按钮权限</div>
               </div>
-              <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
-                <div className="text-2xl font-bold text-purple-600">{stats.data}</div>
-                <div className="text-sm text-purple-600">数据权限</div>
+              <div className="rounded-lg border bg-accent/10 p-4">
+                <div className="text-2xl font-bold text-accent">{stats.data}</div>
+                <div className="text-sm text-accent">数据权限</div>
               </div>
             </div>
           )}

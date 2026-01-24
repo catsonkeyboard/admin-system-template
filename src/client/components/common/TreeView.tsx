@@ -70,7 +70,7 @@ function TreeNodeItem({
 
         {/* Folder Icon */}
         {expanded ? (
-          <FolderOpen className="h-4 w-4 text-primary" />
+          <FolderOpen className="h-4 w-4 text-accent" />
         ) : (
           <Folder className="h-4 w-4 text-muted-foreground" />
         )}
@@ -160,7 +160,7 @@ export function TreeView({
   onSelect
 }: TreeViewProps) {
   return (
-    <div className="rounded-lg border border-border bg-card p-2 text-card-foreground">
+    <div className="rounded-lg border border-border bg-card p-2 text-foreground">
       {data.length === 0 ? (
         <div className="py-8 text-center text-sm text-muted-foreground">
           暂无数据

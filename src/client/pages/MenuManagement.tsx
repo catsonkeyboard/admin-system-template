@@ -174,17 +174,17 @@ export function MenuManagement() {
                 <div className="text-2xl font-bold">{stats.total}</div>
                 <div className="text-sm text-muted-foreground">总菜单数</div>
               </div>
-              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <div className="text-2xl font-bold text-blue-600">{stats.directories}</div>
-                <div className="text-sm text-blue-600">目录</div>
+              <div className="rounded-lg border bg-info/10 p-4">
+                <div className="text-2xl font-bold text-info">{stats.directories}</div>
+                <div className="text-sm text-info">目录</div>
               </div>
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                <div className="text-2xl font-bold text-green-600">{stats.menus}</div>
-                <div className="text-sm text-green-600">菜单</div>
+              <div className="rounded-lg border bg-success/10 p-4">
+                <div className="text-2xl font-bold text-success">{stats.menus}</div>
+                <div className="text-sm text-success">菜单</div>
               </div>
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                <div className="text-2xl font-bold text-green-600">{stats.active}</div>
-                <div className="text-sm text-green-600">启用中</div>
+              <div className="rounded-lg border bg-success/10 p-4">
+                <div className="text-2xl font-bold text-success">{stats.active}</div>
+                <div className="text-sm text-success">启用中</div>
               </div>
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold text-muted-foreground">{stats.inactive}</div>
@@ -205,7 +205,7 @@ export function MenuManagement() {
               {isLoading ? (
                 <div className="flex h-96 items-center justify-center rounded-lg border bg-background">
                   <div className="text-center">
-                    <RefreshCw className="mx-auto h-8 w-8 animate-spin text-primary" />
+                    <RefreshCw className="mx-auto h-8 w-8 animate-spin text-accent" />
                     <p className="mt-2 text-sm text-muted-foreground">加载中...</p>
                   </div>
                 </div>
@@ -228,11 +228,11 @@ export function MenuManagement() {
                 {selectedMenu ? (
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 border-b pb-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
                         {selectedMenu.type === 'DIRECTORY' ? (
-                          <Folder className="h-6 w-6 text-primary" />
+                          <Folder className="h-6 w-6 text-accent" />
                         ) : (
-                          <Menu className="h-6 w-6 text-green-600" />
+                          <Menu className="h-6 w-6 text-success" />
                         )}
                       </div>
                       <div>

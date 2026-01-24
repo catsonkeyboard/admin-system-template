@@ -25,7 +25,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     const id = Math.random().toString(36).substr(2, 9)
     setToasts((prev) => [...prev, { id, message, type }])
 
-    // 自动移除
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id))
     }, 3000)
@@ -49,10 +48,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
   const typeStyles = {
-    success: "bg-green-600 text-white",
-    error: "bg-red-600 text-white",
-    warning: "bg-yellow-600 text-white",
-    info: "bg-blue-600 text-white",
+    success: "bg-success text-white",
+    error: "bg-destructive text-white",
+    warning: "bg-info text-white",
+    info: "bg-accent text-white",
   }
 
   return (

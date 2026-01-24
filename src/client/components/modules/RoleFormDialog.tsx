@@ -121,7 +121,7 @@ export function RoleFormDialog({
                   placeholder="请输入角色代码（唯一）"
                   disabled={!!formData.id}
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   例如：ADMIN, USER, MANAGER
                 </p>
               </div>

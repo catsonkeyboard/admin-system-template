@@ -82,7 +82,7 @@ export function DataTable<T extends { id: string }>({
                           {onEdit && (
                             <button
                               onClick={() => onEdit(record)}
-                              className="rounded p-1 text-primary hover:bg-primary/10 transition-colors"
+                              className="rounded p-1 text-accent hover:bg-accent/10 transition-colors"
                               title="编辑"
                             >
                               <Pencil className="h-4 w-4" />

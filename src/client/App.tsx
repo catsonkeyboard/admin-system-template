@@ -27,7 +27,7 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="system" defaultFont="system" storageKey="vite-ui-theme">
           <ToastProvider>
             <BrowserRouter>
               <Routes>

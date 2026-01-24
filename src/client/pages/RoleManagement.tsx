@@ -54,8 +54,8 @@ export function RoleManagement() {
       title: '角色名称',
       render: (name: string, record: any) => (
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-            <Shield className="h-4 w-4 text-primary" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
+            <Shield className="h-4 w-4 text-accent" />
           </div>
           <div>
             <div className="font-medium">{name}</div>
@@ -176,17 +176,17 @@ export function RoleManagement() {
                 <div className="text-2xl font-bold">{stats.total}</div>
                 <div className="text-sm text-muted-foreground">总角色数</div>
               </div>
-              <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-                <div className="text-2xl font-bold text-green-600">{stats.active}</div>
-                <div className="text-sm text-green-600">启用中</div>
+              <div className="rounded-lg border bg-success/10 p-4">
+                <div className="text-2xl font-bold text-success">{stats.active}</div>
+                <div className="text-sm text-success">启用中</div>
               </div>
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold text-muted-foreground">{stats.inactive}</div>
                 <div className="text-sm text-muted-foreground">已停用</div>
               </div>
-              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <div className="text-2xl font-bold text-blue-600">{stats.totalUsers}</div>
-                <div className="text-sm text-blue-600">关联用户</div>
+              <div className="rounded-lg border bg-accent/10 p-4">
+                <div className="text-2xl font-bold text-accent">{stats.totalUsers}</div>
+                <div className="text-sm text-accent">关联用户</div>
               </div>
             </div>
           )}

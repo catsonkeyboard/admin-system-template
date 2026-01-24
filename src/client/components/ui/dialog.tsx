@@ -33,7 +33,7 @@ const DialogContent: React.FC<DialogContentProps> = ({ children, className }) =>
   return (
     <div
       className={cn(
-        "w-full max-w-lg rounded-lg border bg-card text-card-foreground shadow-lg",
+        "w-full max-w-lg rounded-lg border border-border bg-card text-foreground shadow-lg",
         className
       )}
     >
@@ -81,7 +81,7 @@ const DialogClose: React.FC<React.HTMLAttributes<HTMLButtonElement>> = ({
   <button
     type="button"
     className={cn(
-      "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+      "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none",
       className
     )}
     {...props}

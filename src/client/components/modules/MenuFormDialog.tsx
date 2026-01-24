@@ -224,7 +224,7 @@ export function MenuFormDialog({
                   onChange={(e) => setFormData({ ...formData, path: e.target.value })}
                   placeholder="/system/menu"
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {formData.type === 'DIRECTORY' ? '目录可以不填写路径' : '菜单必须填写路由路径'}
                 </p>
               </div>
@@ -237,7 +237,7 @@ export function MenuFormDialog({
                   onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
                   placeholder="Menu, Users, Settings"
                 />
-                <p className="text-xs text-gray-500">使用 lucide-react 图标名称</p>
+                <p className="text-xs text-muted-foreground">使用 lucide-react 图标名称</p>
               </div>
 
               <div className="space-y-2">
@@ -259,7 +259,7 @@ export function MenuFormDialog({
                   onChange={(e) => setFormData({ ...formData, sort: parseInt(e.target.value) || 0 })}
                   placeholder="0"
                 />
-                <p className="text-xs text-gray-500">数字越小越靠前</p>
+                <p className="text-xs text-muted-foreground">数字越小越靠前</p>
               </div>
             </div>
 
