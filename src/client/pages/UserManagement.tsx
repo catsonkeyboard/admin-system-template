@@ -11,6 +11,7 @@ import { Plus, Search, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
 import { Badge } from '@/client/components/ui/badge'
+import { useTranslation } from 'react-i18next'
 
 interface UserFormData {
   id?: string
@@ -30,6 +31,7 @@ export function UserManagement() {
   const [editingUser, setEditingUser] = useState<UserFormData | null>(null)
   const { showToast } = useToast()
   const { canEdit, canDelete } = usePermission()
+  const { t } = useTranslation()
 
   // 查询用户列表
   const { data: usersData, isLoading, refetch } = trpc.user.list.useQuery({
@@ -42,49 +44,49 @@ export function UserManagement() {
   const deleteMutation = trpc.user.delete.useMutation({
     onSuccess: () => {
       refetch()
-      showToast('用户删除成功', 'success')
+      showToast(t('user.deleteSuccess'), 'success')
     },
     onError: (error) => {
-      showToast(`删除失败: ${error.message}`, 'error')
+      showToast(`${t('common.actions.delete')} ${t('common.status.fail') || 'failed'}: ${error.message}`, 'error')
     },
   })
 
   const columns = [
     {
       key: 'username',
-      title: '用户名',
+      title: t('common.columns.username'),
     },
     {
       key: 'realName',
-      title: '姓名',
+      title: t('common.columns.realName'),
     },
     {
       key: 'phone',
-      title: '手机号',
+      title: t('common.columns.phone'),
       render: (phone: string) => phone || '-',
     },
     {
       key: 'department',
-      title: '部门',
+      title: t('common.columns.department'),
       render: (_: any, record: any) => record.department?.name || '-',
     },
     {
       key: 'position',
-      title: '岗位',
+      title: t('common.columns.position'),
       render: (position: string) => position || '-',
     },
     {
       key: 'status',
-      title: '状态',
+      title: t('common.columns.status'),
       render: (status: string) => (
         <Badge variant={status === 'ACTIVE' ? 'default' : 'secondary'}>
-          {status === 'ACTIVE' ? '正常' : '停用'}
+          {status === 'ACTIVE' ? t('common.status.active') : t('common.status.inactive')}
         </Badge>
       ),
     },
     {
       key: 'createdAt',
-      title: '创建时间',
+      title: t('common.columns.createdAt'),
       render: (date: Date) => format(new Date(date), 'yyyy-MM-dd HH:mm'),
     },
   ]
@@ -108,7 +110,7 @@ export function UserManagement() {
   }
 
   const handleDelete = (user: any) => {
-    if (confirm(`确定删除用户 ${user.realName} 吗？此操作不可恢复。`)) {
+    if (confirm(t('user.deleteConfirm', { name: user.realName }))) {
       deleteMutation.mutate({ id: user.id })
     }
   }
@@ -119,8 +121,8 @@ export function UserManagement() {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
-              <CardTitle>用户管理</CardTitle>
-              <CardDescription>管理系统用户，配置角色和权限</CardDescription>
+              <CardTitle>{t('user.title')}</CardTitle>
+              <CardDescription>{t('user.description')}</CardDescription>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => refetch()}>
@@ -129,7 +131,7 @@ export function UserManagement() {
               <PermissionGuard permission="user:create">
                 <Button onClick={handleCreate}>
                   <Plus className="mr-2 h-4 w-4" />
-                  新建用户
+                  {t('user.create')}
                 </Button>
               </PermissionGuard>
             </div>
@@ -141,7 +143,7 @@ export function UserManagement() {
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="搜索用户名、姓名、手机号"
+                placeholder={t('user.searchPlaceholder')}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 className="pl-10"
@@ -162,7 +164,7 @@ export function UserManagement() {
           {usersData && usersData.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                共 {usersData.total} 条记录，第 {page} / {usersData.totalPages} 页
+                {t('common.pagination.total', { total: usersData.total, current: page, totalPage: usersData.totalPages })}
               </div>
               <div className="flex gap-2">
                 <Button
@@ -170,14 +172,14 @@ export function UserManagement() {
                   onClick={() => setPage(page - 1)}
                   disabled={page === 1}
                 >
-                  上一页
+                  {t('common.pagination.prev')}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setPage(page + 1)}
                   disabled={page === usersData.totalPages}
                 >
-                  下一页
+                  {t('common.pagination.next')}
                 </Button>
               </div>
             </div>
@@ -192,7 +194,7 @@ export function UserManagement() {
         user={editingUser}
         onSuccess={() => {
           refetch()
-          showToast(editingUser ? '用户更新成功' : '用户创建成功', 'success')
+          showToast(editingUser ? t('user.updateSuccess') : t('user.createSuccess'), 'success')
         }}
       />
     </div>

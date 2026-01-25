@@ -1,0 +1,192 @@
+{
+    "login": {
+        "title": "Admin Management System",
+        "desc": "Please enter your credentials to login",
+        "username": "Username",
+        "usernamePlaceholder": "Enter username",
+        "password": "Password",
+        "passwordPlaceholder": "Enter password",
+        "button": "Login",
+        "loggingIn": "Logging in...",
+        "defaultAccount": "Default Account: admin / admin123"
+    },
+    "sidebar": {
+        "home": "Home",
+        "system": "System Management",
+        "user": "User Management",
+        "department": "Department Management",
+        "menu": "Menu Management",
+        "permission": "Permission Management",
+        "role": "Role Management",
+        "statistics": "Statistics",
+        "lineChart": "Line Chart",
+        "barChart": "Bar Chart",
+        "pieChart": "Pie Chart",
+        "scatterChart": "Scatter Chart",
+        "radarChart": "Radar Chart",
+        "sunburstChart": "Sunburst Chart",
+        "mixedChart": "Mixed Chart",
+        "collapse": "Collapse"
+    },
+    "header": {
+        "title": "Admin Management System",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "unassigned": "Unassigned Department",
+        "guest": "Guest"
+    },
+    "home": {
+        "welcome": "Welcome back, {{name}}!",
+        "subtitle": "This is your Admin System Console, start managing your system.",
+        "stats": {
+            "totalUsers": "Total Users",
+            "departments": "Departments",
+            "roles": "Roles",
+            "permissions": "Permissions",
+            "compare": "vs last month"
+        },
+        "quickActions": "Quick Actions",
+        "recentActivity": "Recent Activity",
+        "systemStatus": "System Status",
+        "quickStart": "Quick Start",
+        "startGuide": {
+            "title": "Quick Start Guide",
+            "p1": "Backend API (tRPC + Prisma) ready",
+            "p2": "Database schema design ready (7 core tables)",
+            "p3": "User authentication and permission system implemented",
+            "p4": "Complete layout system (Sidebar + Header + Tab)"
+        }
+    },
+    "user": {
+        "title": "User Management",
+        "description": "Manage system users, configure roles and permissions.",
+        "create": "New User",
+        "searchPlaceholder": "Search username, name, phone",
+        "deleteConfirm": "Are you sure you want to delete user {{name}}? This cannot be undone.",
+        "deleteSuccess": "User deleted successfully",
+        "updateSuccess": "User updated successfully",
+        "createSuccess": "User created successfully"
+    },
+    "role": {
+        "title": "Role Management",
+        "description": "Manage system roles and permission assignments.",
+        "create": "New Role",
+        "searchPlaceholder": "Search role name, code",
+        "assignPermissions": "Assign Permissions"
+    },
+    "permission": {
+        "title": "Permission Management",
+        "description": "Manage system permission codes and resources.",
+        "create": "New Permission",
+        "searchPlaceholder": "Search name, code"
+    },
+    "department": {
+        "title": "Department Management",
+        "description": "Manage system department organizational structure.",
+        "create": "New Department"
+    },
+    "menu": {
+        "title": "Menu Management",
+        "description": "Manage system menu and route configurations.",
+        "create": "New Menu"
+    },
+    "common": {
+        "columns": {
+            "username": "Username",
+            "realName": "Name",
+            "name": "Name",
+            "phone": "Phone",
+            "department": "Department",
+            "position": "Position",
+            "status": "Status",
+            "createdAt": "Created At",
+            "actions": "Actions",
+            "roleName": "Role Name",
+            "roleCode": "Role Code",
+            "description": "Description",
+            "permissionName": "Permission Name",
+            "permissionCode": "Permission Code",
+            "type": "Type",
+            "menuName": "Menu Name",
+            "menuCode": "Menu Code",
+            "path": "Route Path",
+            "icon": "Icon",
+            "sort": "Sort",
+            "level": "Level",
+            "menuName": "Menu Name"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "locked": "Locked",
+            "success": "Success",
+            "fail": "Failed"
+        },
+        "actions": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "search": "Search",
+            "reset": "Reset"
+        },
+        "pagination": {
+            "total": "Total {{total}} items, page {{current}} / {{totalPage}}",
+            "prev": "Previous",
+            "next": "Next"
+        }
+    },
+    "charts": {
+        "line": {
+            "title": "Line Chart Example",
+            "description": "Display data trends over time",
+            "cardTitle": "Multi-dimensional Data Comparison"
+        },
+        "bar": {
+            "title": "Bar Chart Example",
+            "description": "Compare data sizes across different categories",
+            "chartTitle": "Department Performance Statistics",
+            "cardTitle": "Department Performance Completion",
+            "legend": {
+                "target": "Target",
+                "actual": "Actual"
+            }
+        },
+        "pie": {
+            "title": "Pie Chart Example",
+            "description": "Show relationship between parts and whole",
+            "userSource": "User Source Distribution",
+            "deviceType": "Device Type Distribution",
+            "ringChart": "Ring Chart Example"
+        },
+        "radar": {
+            "title": "Radar Chart Example",
+            "description": "Display multi-dimensional data comparison",
+            "chartTitle": "Basic Radar Chart",
+            "cardTitle": "Department Budget Analysis",
+            "budget": "Budget Allocation",
+            "spending": "Actual Spending"
+        },
+        "scatter": {
+            "title": "Scatter Chart Example",
+            "description": "Observe correlation between variables",
+            "chartTitle": "Scatter Chart Example",
+            "cardTitle": "Data Distribution Analysis"
+        },
+        "sunburst": {
+            "title": "Sunburst Chart Example",
+            "description": "Display hierarchical data proportions",
+            "chartTitle": "Sunburst Chart Example",
+            "cardTitle": "Hierarchical Structure Data"
+        },
+        "mixed": {
+            "title": "Mixed Chart Example",
+            "description": "Display combination of multiple chart types",
+            "cardTitle": "Weather Data Analysis",
+            "evaporation": "Evaporation",
+            "precipitation": "Precipitation",
+            "temperature": "Average Temperature"
+        }
+    }
+}

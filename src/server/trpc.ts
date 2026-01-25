@@ -8,6 +8,7 @@ export const prisma = new PrismaClient()
 export interface Context {
   user?: JWTPayload
   prisma: typeof prisma
+  lang?: string
 }
 
 export const createContext = async ({
@@ -17,15 +18,20 @@ export const createContext = async ({
   const authHeader = req.headers.authorization
   const token = authHeader?.replace('Bearer ', '')
 
+  // 获取语言
+  const acceptLanguage = req.headers['accept-language'] || 'en'
+  // 简化的语言提取逻辑：如果包含 zh 则默认为 zh，否则为 en
+  const lang = acceptLanguage.includes('zh') ? 'zh' : 'en'
+
   if (!token) {
-    return { prisma }
+    return { prisma, lang }
   }
 
   try {
     const user = verifyToken(token)
-    return { user, prisma }
+    return { user, prisma, lang }
   } catch (error) {
-    return { prisma }
+    return { prisma, lang }
   }
 }
 
@@ -41,6 +47,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
     ctx: {
       ...ctx,
       user: ctx.user,
+      lang: ctx.lang,
     },
   })
 })

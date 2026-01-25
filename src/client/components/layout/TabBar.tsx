@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useTabStore } from '@/client/stores/tabStore'
 import { X, MoreVertical } from 'lucide-react'
 import { cn } from '@/client/utils/cn'
 
 export function TabBar() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { tabs, activeTabId, removeTab, setActiveTab, closeOtherTabs, closeAllTabs } =
     useTabStore()
 
@@ -46,7 +48,9 @@ export function TabBar() {
                 : 'text-muted-foreground border-transparent hover:text-foreground hover:bg-foreground/5'
             )}
           >
-            <span className="whitespace-nowrap">{tab.title}</span>
+            <span className="whitespace-nowrap">
+              {tab.localizationKey ? t(tab.localizationKey) : tab.title}
+            </span>
             {tab.closable && (
               <button
                 onClick={(e) => handleCloseTab(tab.id, e)}

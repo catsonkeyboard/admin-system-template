@@ -3,7 +3,7 @@ import { router, protectedProcedure, prisma } from '../trpc'
 
 export const departmentRouter = router({
   // 获取部门树
-  tree: protectedProcedure.query(async () => {
+  tree: protectedProcedure.query(async ({ ctx }) => {
     const departments = await prisma.department.findMany({
       include: {
         children: {
@@ -20,9 +20,15 @@ export const departmentRouter = router({
       orderBy: { sort: 'asc' },
     })
 
+    // 翻译部门名称
+    const translatedDepartments = departments.map((dept) => ({
+      ...dept,
+      name: (ctx.lang === 'en' ? dept.nameEn : dept.name) || dept.name,
+    }))
+
     // 递归构建树形结构
     const buildTree = (parentId: string | null): any[] => {
-      return departments
+      return translatedDepartments
         .filter((dept) => dept.parentId === parentId)
         .map((dept) => ({
           ...dept,
@@ -34,8 +40,8 @@ export const departmentRouter = router({
   }),
 
   // 获取所有部门（平铺列表）
-  list: protectedProcedure.query(async () => {
-    return prisma.department.findMany({
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const departments = await prisma.department.findMany({
       include: {
         parent: true,
         _count: {
@@ -47,19 +53,31 @@ export const departmentRouter = router({
       },
       orderBy: [{ level: 'asc' }, { sort: 'asc' }],
     })
+
+    return departments.map((dept) => ({
+      ...dept,
+      name: (ctx.lang === 'en' ? dept.nameEn : dept.name) || dept.name,
+    }))
   }),
 
   // 获取单个部门
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return prisma.department.findUnique({
+    .query(async ({ input, ctx }) => {
+      const dept = await prisma.department.findUnique({
         where: { id: input.id },
         include: {
           parent: true,
           children: true,
         },
       })
+
+      if (!dept) return null
+
+      return {
+        ...dept,
+        name: (ctx.lang === 'en' ? dept.nameEn : dept.name) || dept.name,
+      }
     }),
 
   // 创建部门
@@ -67,6 +85,7 @@ export const departmentRouter = router({
     .input(
       z.object({
         name: z.string().min(1, '部门名称不能为空'),
+        nameEn: z.string().optional(),
         code: z.string().min(1, '部门代码不能为空'),
         parentId: z.string().optional(),
         sort: z.number().default(0),
@@ -106,6 +125,7 @@ export const departmentRouter = router({
       z.object({
         id: z.string(),
         name: z.string().optional(),
+        nameEn: z.string().optional(),
         code: z.string().optional(),
         parentId: z.string().optional(),
         sort: z.number().optional(),

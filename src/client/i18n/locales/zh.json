@@ -1,0 +1,192 @@
+{
+    "login": {
+        "title": "Admin 管理系统",
+        "desc": "请输入您的账号密码登录",
+        "username": "用户名",
+        "usernamePlaceholder": "请输入用户名",
+        "password": "密码",
+        "passwordPlaceholder": "请输入密码",
+        "button": "登录",
+        "loggingIn": "登录中...",
+        "defaultAccount": "默认账号: admin / admin123"
+    },
+    "sidebar": {
+        "home": "首页",
+        "system": "系统管理",
+        "user": "用户管理",
+        "department": "部门管理",
+        "menu": "菜单管理",
+        "permission": "权限管理",
+        "role": "角色管理",
+        "statistics": "统计分析",
+        "lineChart": "折线图",
+        "barChart": "柱状图",
+        "pieChart": "饼图",
+        "scatterChart": "散点图",
+        "radarChart": "雷达图",
+        "sunburstChart": "旭日图",
+        "mixedChart": "混合图表",
+        "collapse": "收起"
+    },
+    "header": {
+        "title": "Admin 管理系统",
+        "profile": "个人信息",
+        "settings": "系统设置",
+        "logout": "退出登录",
+        "unassigned": "未分配部门",
+        "guest": "用户"
+    },
+    "home": {
+        "welcome": "欢迎回来，{{name}}！",
+        "subtitle": "这是您的 Admin 管理系统控制台，开始管理您的系统吧",
+        "stats": {
+            "totalUsers": "总用户数",
+            "departments": "部门数量",
+            "roles": "角色数",
+            "permissions": "权限码",
+            "compare": "较上月"
+        },
+        "quickActions": "快捷操作",
+        "recentActivity": "最近活动",
+        "systemStatus": "系统状态",
+        "quickStart": "快速开始",
+        "startGuide": {
+            "title": "快速开始指南",
+            "p1": "后端 API 已完成（tRPC + Prisma）",
+            "p2": "数据库设计已完成（7个核心表）",
+            "p3": "用户认证和权限系统已实现",
+            "p4": "完整的布局系统（侧边栏 + 头部 + Tab）"
+        }
+    },
+    "user": {
+        "title": "用户管理",
+        "description": "管理系统用户，配置角色和权限",
+        "create": "新建用户",
+        "searchPlaceholder": "搜索用户名、姓名、手机号",
+        "deleteConfirm": "确定删除用户 {{name}} 吗？此操作不可恢复。",
+        "deleteSuccess": "用户删除成功",
+        "updateSuccess": "用户更新成功",
+        "createSuccess": "用户创建成功"
+    },
+    "role": {
+        "title": "角色管理",
+        "description": "管理系统角色及其权限分配",
+        "create": "新建角色",
+        "searchPlaceholder": "搜索角色名称、代码",
+        "assignPermissions": "分配权限"
+    },
+    "permission": {
+        "title": "权限管理",
+        "description": "管理系统权限码和资源",
+        "create": "新建权限",
+        "searchPlaceholder": "搜索名称、代码"
+    },
+    "department": {
+        "title": "部门管理",
+        "description": "管理系统部门组织架构",
+        "create": "新建部门"
+    },
+    "menu": {
+        "title": "菜单管理",
+        "description": "管理系统菜单及路由配置",
+        "create": "新建菜单"
+    },
+    "common": {
+        "columns": {
+            "username": "用户名",
+            "realName": "姓名",
+            "name": "名称",
+            "phone": "手机号",
+            "department": "部门",
+            "position": "岗位",
+            "status": "状态",
+            "createdAt": "创建时间",
+            "actions": "操作",
+            "roleName": "角色名称",
+            "roleCode": "角色代码",
+            "description": "描述",
+            "permissionName": "权限名称",
+            "permissionCode": "权限代码",
+            "type": "类型",
+            "menuName": "菜单名称",
+            "menuCode": "菜单代码",
+            "path": "路由路径",
+            "icon": "图标",
+            "sort": "排序",
+            "level": "层级",
+            "menuName": "菜单名称"
+        },
+        "status": {
+            "active": "正常",
+            "inactive": "停用",
+            "locked": "锁定",
+            "success": "成功",
+            "fail": "失败"
+        },
+        "actions": {
+            "edit": "编辑",
+            "delete": "删除",
+            "confirm": "确定",
+            "cancel": "取消",
+            "search": "搜索",
+            "reset": "重置"
+        },
+        "pagination": {
+            "total": "共 {{total}} 条记录，第 {{current}} / {{totalPage}} 页",
+            "prev": "上一页",
+            "next": "下一页"
+        }
+    },
+    "charts": {
+        "line": {
+            "title": "折线图示例",
+            "description": "展示数据随时间变化的趋势",
+            "cardTitle": "多维度数据对比"
+        },
+        "bar": {
+            "title": "柱状图示例",
+            "description": "用于比较不同类别的数据大小",
+            "chartTitle": "各部门业绩统计",
+            "cardTitle": "部门业绩完成情况",
+            "legend": {
+                "target": "目标",
+                "actual": "实际"
+            }
+        },
+        "pie": {
+            "title": "饼图示例",
+            "description": "展示部分与整体的关系",
+            "userSource": "用户来源分布",
+            "deviceType": "设备类型分布",
+            "ringChart": "环形图示例"
+        },
+        "radar": {
+            "title": "雷达图示例",
+            "description": "用于展示多维数据的对比情况",
+            "chartTitle": "基础雷达图",
+            "cardTitle": "部门预算分析",
+            "budget": "预算分配",
+            "spending": "实际开销"
+        },
+        "scatter": {
+            "title": "散点图示例",
+            "description": "用于观察变量之间的相关性",
+            "chartTitle": "散点图示例",
+            "cardTitle": "数据分布分析"
+        },
+        "sunburst": {
+            "title": "旭日图示例",
+            "description": "用于展示层级数据的占比情况",
+            "chartTitle": "旭日图示例",
+            "cardTitle": "层级结构数据"
+        },
+        "mixed": {
+            "title": "混合图表示例",
+            "description": "展示多种图表类型的组合使用",
+            "cardTitle": "气象数据分析",
+            "evaporation": "蒸发量",
+            "precipitation": "降水量",
+            "temperature": "平均温度"
+        }
+    }
+}

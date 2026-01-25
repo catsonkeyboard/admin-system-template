@@ -13,7 +13,7 @@ export const permissionRouter = router({
         keyword: z.string().optional(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const { page, pageSize, menuId, type, keyword } = input
       const skip = (page - 1) * pageSize
 
@@ -42,8 +42,13 @@ export const permissionRouter = router({
         }),
       ])
 
+      const translatedItems = items.map((perm) => ({
+        ...perm,
+        name: (ctx.lang === 'en' ? perm.nameEn : perm.name) || perm.name,
+      }))
+
       return {
-        items,
+        items: translatedItems,
         total,
         page,
         pageSize,
@@ -57,6 +62,7 @@ export const permissionRouter = router({
       z.object({
         code: z.string().min(1),
         name: z.string().min(1),
+        nameEn: z.string().optional(),
         menuId: z.string().optional(),
         type: z.enum(['MENU', 'BUTTON', 'DATA']),
         description: z.string().optional(),
@@ -74,6 +80,7 @@ export const permissionRouter = router({
       z.object({
         id: z.string(),
         name: z.string().optional(),
+        nameEn: z.string().optional(),
         code: z.string().optional(),
         menuId: z.string().optional(),
         type: z.enum(['MENU', 'BUTTON', 'DATA']).optional(),

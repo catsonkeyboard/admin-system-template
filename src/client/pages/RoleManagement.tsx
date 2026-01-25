@@ -11,6 +11,7 @@ import { usePermission } from '@/client/hooks/usePermission'
 import { Plus, Search, RefreshCw, Shield, Users, Key } from 'lucide-react'
 import { format } from 'date-fns'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { useTranslation } from 'react-i18next'
 
 interface RoleFormData {
   id?: string
@@ -29,6 +30,7 @@ export function RoleManagement() {
   const [configuringRole, setConfiguringRole] = useState<{ id: string; name: string } | null>(null)
   const { showToast } = useToast()
   const { canEdit, canDelete } = usePermission()
+  const { t } = useTranslation()
 
   // 查询角色列表
   const { data: rolesData, isLoading, refetch } = trpc.role.list.useQuery({
@@ -41,17 +43,17 @@ export function RoleManagement() {
   const deleteMutation = trpc.role.delete.useMutation({
     onSuccess: () => {
       refetch()
-      showToast('角色删除成功', 'success')
+      showToast(t('common.status.success') || 'Success', 'success')
     },
     onError: (error) => {
-      showToast(`删除失败: ${error.message}`, 'error')
+      showToast(`${t('common.status.fail')}: ${error.message}`, 'error')
     },
   })
 
   const columns = [
     {
       key: 'name',
-      title: '角色名称',
+      title: t('common.columns.roleName'),
       render: (name: string, record: any) => (
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
@@ -66,35 +68,35 @@ export function RoleManagement() {
     },
     {
       key: 'status',
-      title: '状态',
+      title: t('common.columns.status'),
       render: (status: string) => (
         <Badge variant={status === 'ACTIVE' ? 'default' : 'secondary'}>
-          {status === 'ACTIVE' ? '启用' : '停用'}
+          {status === 'ACTIVE' ? t('common.status.active') : t('common.status.inactive')}
         </Badge>
       ),
     },
     {
       key: 'userCount',
-      title: '用户数量',
+      title: t('home.stats.totalUsers'), // Reuse or new key
       render: (_: any, record: any) => (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Users className="h-4 w-4" />
-          <span>{record.userRoles?.length || 0} 人</span>
+          <span>{record.userRoles?.length || 0}</span>
         </div>
       ),
     },
     {
       key: 'permissionCount',
-      title: '权限数量',
+      title: t('home.stats.permissions'),
       render: (_: any, record: any) => (
         <div className="text-sm text-muted-foreground">
-          {record.rolePermissions?.length || 0} 个权限
+          {record.rolePermissions?.length || 0}
         </div>
       ),
     },
     {
       key: 'description',
-      title: '描述',
+      title: t('common.columns.description'),
       render: (description: string) => (
         <span className="text-sm text-muted-foreground">
           {description || '-'}
@@ -103,7 +105,7 @@ export function RoleManagement() {
     },
     {
       key: 'createdAt',
-      title: '创建时间',
+      title: t('common.columns.createdAt'),
       render: (date: Date) => (
         <span className="text-sm text-muted-foreground">
           {format(new Date(date), 'yyyy-MM-dd HH:mm')}
@@ -135,7 +137,7 @@ export function RoleManagement() {
       return
     }
 
-    if (confirm(`确定删除角色 ${role.name} 吗？此操作不可恢复。`)) {
+    if (confirm(`Are you sure to delete role ${role.name}?`)) {
       deleteMutation.mutate({ id: role.id })
     }
   }
@@ -159,8 +161,8 @@ export function RoleManagement() {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
-              <CardTitle>角色管理</CardTitle>
-              <CardDescription>管理系统角色，配置角色权限</CardDescription>
+              <CardTitle>{t('role.title')}</CardTitle>
+              <CardDescription>{t('role.description')}</CardDescription>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => refetch()}>
@@ -169,7 +171,7 @@ export function RoleManagement() {
               <PermissionGuard permission="role:create">
                 <Button onClick={handleCreate}>
                   <Plus className="mr-2 h-4 w-4" />
-                  新建角色
+                  {t('role.create')}
                 </Button>
               </PermissionGuard>
             </div>
@@ -181,19 +183,19 @@ export function RoleManagement() {
             <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold">{stats.total}</div>
-                <div className="text-sm text-muted-foreground">总角色数</div>
+                <div className="text-sm text-muted-foreground">{t('role.title')}</div>
               </div>
               <div className="rounded-lg border bg-success/10 p-4">
                 <div className="text-2xl font-bold text-success">{stats.active}</div>
-                <div className="text-sm text-success">启用中</div>
+                <div className="text-sm text-success">{t('common.status.active')}</div>
               </div>
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold text-muted-foreground">{stats.inactive}</div>
-                <div className="text-sm text-muted-foreground">已停用</div>
+                <div className="text-sm text-muted-foreground">{t('common.status.inactive')}</div>
               </div>
               <div className="rounded-lg border bg-accent/10 p-4">
                 <div className="text-2xl font-bold text-accent">{stats.totalUsers}</div>
-                <div className="text-sm text-accent">关联用户</div>
+                <div className="text-sm text-accent">{t('home.stats.totalUsers')}</div>
               </div>
             </div>
           )}
@@ -203,7 +205,7 @@ export function RoleManagement() {
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="搜索角色名称、代码"
+                placeholder={t('role.searchPlaceholder')}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 className="pl-10"
@@ -225,7 +227,7 @@ export function RoleManagement() {
                     </th>
                   ))}
                   <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    操作
+                    {t('common.columns.actions')}
                   </th>
                 </tr>
               </thead>
@@ -233,13 +235,13 @@ export function RoleManagement() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={columns.length + 1} className="px-6 py-12 text-center text-muted-foreground">
-                      加载中...
+                      Loading...
                     </td>
                   </tr>
                 ) : rolesData?.items.length === 0 ? (
                   <tr>
                     <td colSpan={columns.length + 1} className="px-6 py-12 text-center text-muted-foreground">
-                      暂无数据
+                      No Data
                     </td>
                   </tr>
                 ) : (
@@ -261,7 +263,7 @@ export function RoleManagement() {
                               onClick={() => handleConfigurePermissions(record)}
                             >
                               <Key className="mr-1 h-3 w-3" />
-                              配置权限
+                              {t('role.assignPermissions')}
                             </Button>
                           </PermissionGuard>
                           {canEdit('role') && (
@@ -270,7 +272,7 @@ export function RoleManagement() {
                               variant="ghost"
                               onClick={() => handleEdit(record)}
                             >
-                              编辑
+                              {t('common.actions.edit')}
                             </Button>
                           )}
                           {canDelete('role') && (
@@ -280,7 +282,7 @@ export function RoleManagement() {
                               onClick={() => handleDelete(record)}
                               className="text-destructive hover:text-destructive"
                             >
-                              删除
+                              {t('common.actions.delete')}
                             </Button>
                           )}
                         </div>
@@ -296,7 +298,7 @@ export function RoleManagement() {
           {rolesData && rolesData.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                共 {rolesData.total} 条记录，第 {page} / {rolesData.totalPages} 页
+                {t('common.pagination.total', { total: rolesData.total, current: page, totalPage: rolesData.totalPages })}
               </div>
               <div className="flex gap-2">
                 <Button
@@ -304,14 +306,14 @@ export function RoleManagement() {
                   onClick={() => setPage(page - 1)}
                   disabled={page === 1}
                 >
-                  上一页
+                  {t('common.pagination.prev')}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setPage(page + 1)}
                   disabled={page === rolesData.totalPages}
                 >
-                  下一页
+                  {t('common.pagination.next')}
                 </Button>
               </div>
             </div>

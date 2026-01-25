@@ -1,7 +1,8 @@
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useMenuStore } from '@/client/stores/menuStore'
 import { useTabStore } from '@/client/stores/tabStore'
-import { ChevronLeft, ChevronRight, Home, Settings, Users, Building2, Menu as MenuIcon, ShieldCheck, UserCog } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Home, Settings, Users, Building2, Menu as MenuIcon, ShieldCheck, UserCog, Activity, BarChart, PieChart, LineChart, ScatterChart, Radar, CircleDot, Combine } from 'lucide-react'
 import { cn } from '@/client/utils/cn'
 import { Button } from '@/client/components/ui/button'
 
@@ -10,14 +11,40 @@ export function Sidebar() {
   const location = useLocation()
   const { collapsed, toggleCollapsed, menus } = useMenuStore()
   const addTab = useTabStore((state) => state.addTab)
+  const { t } = useTranslation()
 
   const handleMenuClick = (menu: any) => {
     if (menu.path) {
+      // Map menu code/id to localization key
+      // Assuming menu structure matches i18n keys: sidebar.[code] or sidebar.[id]
+      // We need to pass the raw key, not the translated string if we want dynamic updates,
+      // BUT current Sidebar implementation translates `menu.name` BEFORE passing it here if we use `t()` in `defaultMenus`.
+      // However, `defaultMenus` is re-rendered when language changes, so `handleMenuClick` receives translated name.
+      // THE PROBLEM: simple `addTab` stores the STATIC string title at the moment of click.
+      // SOLUTION: Store the translation key in the tab object.
+      
+      // We need to reconstruct the key. 
+      // Based on my previous Sidebar edit, `defaultMenus` uses keys like 'sidebar.home', 'sidebar.statistics', etc.
+      // The `menu` object has `code` or `id`.
+      // Let's assume the key is `sidebar.${menu.code || menu.id}`.
+      // Special case: `mixed-chart` -> `sidebar.mixedChart` (camelCase in json vs kebab-case in id?)
+      // In my JSON: "mixedChart": "Mixed Chart", "lineChart": "Line Chart"
+      // In my Sidebar: id: 'mixed-chart', code: 'mixed-chart'.
+      // So I need to convert id 'mixed-chart' to 'mixedChart'.
+      
+      const toCamelCase = (str: string) => {
+        return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
+      }
+      
+      const keyId = menu.code || menu.id
+      const localizationKey = `sidebar.${toCamelCase(keyId)}`
+
       addTab({
         id: menu.code || menu.id,
-        title: menu.name,
+        title: menu.name, // Display title (will be overridden by TabBar if key exists)
         path: menu.path,
         closable: true,
+        localizationKey: localizationKey,
       })
       navigate(menu.path)
     }
@@ -26,48 +53,105 @@ export function Sidebar() {
   const defaultMenus = [
     {
       id: 'home',
-      name: '首页',
+      name: t('sidebar.home'),
       code: 'home',
       path: '/',
       icon: 'Home',
     },
     {
+      id: 'statistics',
+      name: t('sidebar.statistics'),
+      code: 'statistics',
+      icon: 'Activity',
+      children: [
+        {
+          id: 'line-chart',
+          name: t('sidebar.lineChart'),
+          code: 'line-chart',
+          path: '/dashboard/line',
+          icon: 'LineChart',
+        },
+        {
+          id: 'bar-chart',
+          name: t('sidebar.barChart'),
+          code: 'bar-chart',
+          path: '/dashboard/bar',
+          icon: 'BarChart',
+        },
+        {
+          id: 'pie-chart',
+          name: t('sidebar.pieChart'),
+          code: 'pie-chart',
+          path: '/dashboard/pie',
+          icon: 'PieChart',
+        },
+        {
+          id: 'scatter-chart',
+          name: t('sidebar.scatterChart'),
+          code: 'scatter-chart',
+          path: '/dashboard/scatter',
+          icon: 'ScatterChart',
+        },
+        {
+          id: 'radar-chart',
+          name: t('sidebar.radarChart'),
+          code: 'radar-chart',
+          path: '/dashboard/radar',
+          icon: 'Radar',
+        },
+        {
+          id: 'sunburst-chart',
+          name: t('sidebar.sunburstChart'),
+          code: 'sunburst-chart',
+          path: '/dashboard/sunburst',
+          icon: 'CircleDot',
+        },
+        {
+          id: 'mixed-chart',
+          name: t('sidebar.mixedChart'),
+          code: 'mixed-chart',
+          path: '/dashboard/mixed',
+          icon: 'Combine',
+        },
+      ],
+    },
+    {
       id: 'system',
-      name: '系统管理',
+      name: t('sidebar.system'),
       code: 'system',
       icon: 'Settings',
       children: [
         {
           id: 'user',
-          name: '用户管理',
+          name: t('sidebar.user'),
           code: 'user',
           path: '/system/user',
           icon: 'Users',
         },
         {
           id: 'department',
-          name: '部门管理',
+          name: t('sidebar.department'),
           code: 'department',
           path: '/system/department',
           icon: 'Building2',
         },
         {
           id: 'menu',
-          name: '菜单管理',
+          name: t('sidebar.menu'),
           code: 'menu',
           path: '/system/menu',
           icon: 'MenuIcon',
         },
         {
           id: 'permission',
-          name: '权限管理',
+          name: t('sidebar.permission'),
           code: 'permission',
           path: '/system/permission',
           icon: 'ShieldCheck',
         },
         {
           id: 'role',
-          name: '角色管理',
+          name: t('sidebar.role'),
           code: 'role',
           path: '/system/role',
           icon: 'UserCog',
@@ -87,6 +171,15 @@ export function Sidebar() {
       MenuIcon,
       ShieldCheck,
       UserCog,
+      Activity,
+      BarChart,
+      PieChart,
+      LineChart,
+      ScatterChart,
+      Radar,
+      Sunburst: CircleDot, // CircleDot can act as Sunburst fallback
+      CircleDot,
+      Combine,
     }
     const Icon = icons[iconName || 'Home']
     return Icon ? <Icon className="h-4 w-4" /> : <Home className="h-4 w-4" />
@@ -157,7 +250,7 @@ export function Sidebar() {
           ) : (
             <>
               <ChevronLeft className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate">收起</span>
+              <span className="truncate">{t('sidebar.collapse')}</span>
             </>
           )}
         </Button>

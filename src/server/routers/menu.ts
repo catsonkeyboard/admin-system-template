@@ -3,8 +3,8 @@ import { router, protectedProcedure, prisma } from '../trpc'
 
 export const menuRouter = router({
   // 获取所有菜单（平铺列表）
-  list: protectedProcedure.query(async () => {
-    return prisma.menu.findMany({
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const menus = await prisma.menu.findMany({
       include: {
         parent: true,
         _count: {
@@ -16,6 +16,11 @@ export const menuRouter = router({
       },
       orderBy: { sort: 'asc' },
     })
+
+    return menus.map((menu) => ({
+      ...menu,
+      name: (ctx.lang === 'en' ? menu.nameEn : menu.name) || menu.name,
+    }))
   }),
   // 获取菜单树
   tree: protectedProcedure
@@ -24,7 +29,7 @@ export const menuRouter = router({
         includeInactive: z.boolean().default(false),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const menus = await prisma.menu.findMany({
         where: input.includeInactive
           ? {}
@@ -44,9 +49,15 @@ export const menuRouter = router({
         orderBy: { sort: 'asc' },
       })
 
+      // 翻译菜单名称
+      const translatedMenus = menus.map((menu) => ({
+        ...menu,
+        name: (ctx.lang === 'en' ? menu.nameEn : menu.name) || menu.name,
+      }))
+
       // 递归构建树形结构
       const buildTree = (parentId: string | null): any[] => {
-        return menus
+        return translatedMenus
           .filter((menu) => menu.parentId === parentId)
           .map((menu) => ({
             ...menu,
@@ -120,9 +131,15 @@ export const menuRouter = router({
       orderBy: { sort: 'asc' },
     })
 
+    // 翻译菜单名称
+    const translatedMenus = menus.map((menu) => ({
+      ...menu,
+      name: (ctx.lang === 'en' ? menu.nameEn : menu.name) || menu.name,
+    }))
+
     // 构建树形结构
     const buildTree = (parentId: string | null): any[] => {
-      return menus
+      return translatedMenus
         .filter((menu) => menu.parentId === parentId)
         .map((menu) => ({
           ...menu,
@@ -138,6 +155,7 @@ export const menuRouter = router({
     .input(
       z.object({
         name: z.string().min(1),
+        nameEn: z.string().optional(),
         code: z.string().min(1),
         type: z.enum(['DIRECTORY', 'MENU']),
         path: z.string().optional(),
@@ -168,6 +186,7 @@ export const menuRouter = router({
       z.object({
         id: z.string(),
         name: z.string().optional(),
+        nameEn: z.string().optional(),
         code: z.string().optional(),
         type: z.enum(['DIRECTORY', 'MENU']).optional(),
         path: z.string().optional(),

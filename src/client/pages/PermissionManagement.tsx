@@ -9,6 +9,7 @@ import { useToast } from '@/client/components/ui/toast'
 import { Plus, Search, RefreshCw, Key, Menu, MousePointer, Database } from 'lucide-react'
 import { format } from 'date-fns'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { useTranslation } from 'react-i18next'
 
 interface PermissionFormData {
   id?: string
@@ -25,6 +26,7 @@ export function PermissionManagement() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingPermission, setEditingPermission] = useState<PermissionFormData | null>(null)
   const { showToast } = useToast()
+  const { t } = useTranslation()
 
   // 查询权限列表
   const { data: permissionsData, isLoading, refetch } = trpc.permission.list.useQuery({
@@ -40,10 +42,10 @@ export function PermissionManagement() {
   const deleteMutation = trpc.permission.delete.useMutation({
     onSuccess: () => {
       refetch()
-      showToast('权限删除成功', 'success')
+      showToast(t('common.status.success') || 'Success', 'success')
     },
     onError: (error) => {
-      showToast(`删除失败: ${error.message}`, 'error')
+      showToast(`${t('common.status.fail')}: ${error.message}`, 'error')
     },
   })
 
@@ -76,7 +78,7 @@ export function PermissionManagement() {
   const columns = [
     {
       key: 'name',
-      title: '权限名称',
+      title: t('common.columns.permissionName'),
       render: (name: string, record: any) => (
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
@@ -91,18 +93,18 @@ export function PermissionManagement() {
     },
     {
       key: 'type',
-      title: '权限类型',
+      title: t('common.columns.type'),
       render: (type: string) => (
         <Badge variant={getTypeColor(type) as any}>
-          {type === 'MENU' && '菜单权限'}
-          {type === 'BUTTON' && '按钮权限'}
-          {type === 'DATA' && '数据权限'}
+          {type === 'MENU' && 'Menu'}
+          {type === 'BUTTON' && 'Button'}
+          {type === 'DATA' && 'Data'}
         </Badge>
       ),
     },
     {
       key: 'menuId',
-      title: '关联菜单',
+      title: t('common.columns.menuName'),
       render: (menuId: string) => {
         const menu = menus?.find(m => m.id === menuId)
         return (
@@ -114,16 +116,16 @@ export function PermissionManagement() {
     },
     {
       key: 'roleCount',
-      title: '关联角色',
+      title: 'Roles',
       render: (_: any, record: any) => (
         <div className="text-sm text-muted-foreground">
-          {record.rolePermissions?.length || 0} 个角色
+          {record.rolePermissions?.length || 0}
         </div>
       ),
     },
     {
       key: 'description',
-      title: '描述',
+      title: t('common.columns.description'),
       render: (description: string) => (
         <span className="text-sm text-muted-foreground">
           {description || '-'}
@@ -132,7 +134,7 @@ export function PermissionManagement() {
     },
     {
       key: 'createdAt',
-      title: '创建时间',
+      title: t('common.columns.createdAt'),
       render: (date: Date) => (
         <span className="text-sm text-muted-foreground">
           {format(new Date(date), 'yyyy-MM-dd HH:mm')}
@@ -161,11 +163,11 @@ export function PermissionManagement() {
   const handleDelete = (permission: any) => {
     const roleCount = permission.rolePermissions?.length || 0
     if (roleCount > 0) {
-      showToast(`该权限被 ${roleCount} 个角色使用，无法删除`, 'error')
+      showToast(`This permission is used by ${roleCount} roles, cannot delete`, 'error')
       return
     }
 
-    if (confirm(`确定删除权限 ${permission.name} 吗？此操作不可恢复。`)) {
+    if (confirm(`Are you sure to delete permission ${permission.name}?`)) {
       deleteMutation.mutate({ id: permission.id })
     }
   }
@@ -184,8 +186,8 @@ export function PermissionManagement() {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
-              <CardTitle>权限管理</CardTitle>
-              <CardDescription>管理系统权限，配置菜单、按钮和数据访问权限</CardDescription>
+              <CardTitle>{t('permission.title')}</CardTitle>
+              <CardDescription>{t('permission.description')}</CardDescription>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => refetch()}>
@@ -193,7 +195,7 @@ export function PermissionManagement() {
               </Button>
               <Button onClick={handleCreate}>
                 <Plus className="mr-2 h-4 w-4" />
-                新建权限
+                {t('permission.create')}
               </Button>
             </div>
           </div>
@@ -204,19 +206,19 @@ export function PermissionManagement() {
             <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold">{stats.total}</div>
-                <div className="text-sm text-muted-foreground">总权限数</div>
+                <div className="text-sm text-muted-foreground">Total Permissions</div>
               </div>
               <div className="rounded-lg border bg-info/10 p-4">
                 <div className="text-2xl font-bold text-info">{stats.menu}</div>
-                <div className="text-sm text-info">菜单权限</div>
+                <div className="text-sm text-info">Menu Permissions</div>
               </div>
               <div className="rounded-lg border bg-success/10 p-4">
                 <div className="text-2xl font-bold text-success">{stats.button}</div>
-                <div className="text-sm text-success">按钮权限</div>
+                <div className="text-sm text-success">Button Permissions</div>
               </div>
               <div className="rounded-lg border bg-accent/10 p-4">
                 <div className="text-2xl font-bold text-accent">{stats.data}</div>
-                <div className="text-sm text-accent">数据权限</div>
+                <div className="text-sm text-accent">Data Permissions</div>
               </div>
             </div>
           )}
@@ -226,7 +228,7 @@ export function PermissionManagement() {
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="搜索权限名称、代码"
+                placeholder={t('permission.searchPlaceholder')}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 className="pl-10"
@@ -247,7 +249,7 @@ export function PermissionManagement() {
           {permissionsData && permissionsData.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                共 {permissionsData.total} 条记录，第 {page} / {permissionsData.totalPages} 页
+                {t('common.pagination.total', { total: permissionsData.total, current: page, totalPage: permissionsData.totalPages })}
               </div>
               <div className="flex gap-2">
                 <Button
@@ -255,14 +257,14 @@ export function PermissionManagement() {
                   onClick={() => setPage(page - 1)}
                   disabled={page === 1}
                 >
-                  上一页
+                  {t('common.pagination.prev')}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setPage(page + 1)}
                   disabled={page === permissionsData.totalPages}
                 >
-                  下一页
+                   {t('common.pagination.next')}
                 </Button>
               </div>
             </div>
@@ -278,7 +280,7 @@ export function PermissionManagement() {
         onSuccess={() => {
           refetch()
           showToast(
-            editingPermission ? '权限更新成功' : '权限创建成功',
+            editingPermission ? 'Permission updated' : 'Permission created',
             'success'
           )
         }}

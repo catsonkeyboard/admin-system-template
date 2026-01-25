@@ -8,6 +8,7 @@ import { useToast } from '@/client/components/ui/toast'
 import { Plus, RefreshCw, Menu, Folder, ExternalLink } from 'lucide-react'
 import { format } from 'date-fns'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/client/components/ui/card'
+import { useTranslation } from 'react-i18next'
 
 interface MenuFormData {
   id?: string
@@ -28,6 +29,7 @@ export function MenuManagement() {
   const [parentMenu, setParentMenu] = useState<{ id: string; name: string } | null>(null)
   const [selectedNode, setSelectedNode] = useState<TreeNode | null>(null)
   const { showToast } = useToast()
+  const { t } = useTranslation()
 
   // 查询菜单列表
   const { data: menus, isLoading, refetch } = trpc.menu.list.useQuery()
@@ -36,11 +38,11 @@ export function MenuManagement() {
   const deleteMutation = trpc.menu.delete.useMutation({
     onSuccess: () => {
       refetch()
-      showToast('菜单删除成功', 'success')
+      showToast(t('common.status.success') || 'Success', 'success')
       setSelectedNode(null)
     },
     onError: (error) => {
-      showToast(`删除失败: ${error.message}`, 'error')
+      showToast(`${t('common.status.fail')}: ${error.message}`, 'error')
     },
   })
 
@@ -128,11 +130,11 @@ export function MenuManagement() {
   const handleDelete = (node: TreeNode) => {
     const hasChildren = node.children && node.children.length > 0
     if (hasChildren) {
-      showToast('该菜单下有子菜单，无法删除', 'error')
+      showToast('Cannot delete menu with children', 'error')
       return
     }
 
-    if (confirm(`确定删除菜单 ${node.name} 吗？此操作不可恢复。`)) {
+    if (confirm(`Are you sure to delete menu ${node.name}?`)) {
       deleteMutation.mutate({ id: node.id })
     }
   }
@@ -155,8 +157,8 @@ export function MenuManagement() {
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
-              <CardTitle>菜单管理</CardTitle>
-              <CardDescription>管理系统菜单，配置菜单层级和路由</CardDescription>
+              <CardTitle>{t('menu.title')}</CardTitle>
+              <CardDescription>{t('menu.description')}</CardDescription>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => refetch()}>
@@ -164,7 +166,7 @@ export function MenuManagement() {
               </Button>
               <Button onClick={handleCreate}>
                 <Plus className="mr-2 h-4 w-4" />
-                新建菜单
+                {t('menu.create')}
               </Button>
             </div>
           </div>
@@ -175,23 +177,23 @@ export function MenuManagement() {
             <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-5">
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold">{stats.total}</div>
-                <div className="text-sm text-muted-foreground">总菜单数</div>
+                <div className="text-sm text-muted-foreground">{t('menu.title')}</div>
               </div>
               <div className="rounded-lg border bg-info/10 p-4">
                 <div className="text-2xl font-bold text-info">{stats.directories}</div>
-                <div className="text-sm text-info">目录</div>
+                <div className="text-sm text-info">Directory</div>
               </div>
               <div className="rounded-lg border bg-success/10 p-4">
                 <div className="text-2xl font-bold text-success">{stats.menus}</div>
-                <div className="text-sm text-success">菜单</div>
+                <div className="text-sm text-success">Menu</div>
               </div>
               <div className="rounded-lg border bg-success/10 p-4">
                 <div className="text-2xl font-bold text-success">{stats.active}</div>
-                <div className="text-sm text-success">启用中</div>
+                <div className="text-sm text-success">{t('common.status.active')}</div>
               </div>
               <div className="rounded-lg border bg-muted/50 p-4">
                 <div className="text-2xl font-bold text-muted-foreground">{stats.inactive}</div>
-                <div className="text-sm text-muted-foreground">已停用</div>
+                <div className="text-sm text-muted-foreground">{t('common.status.inactive')}</div>
               </div>
             </div>
           )}
@@ -200,16 +202,16 @@ export function MenuManagement() {
             {/* 左侧树形结构 */}
             <div className="lg:col-span-2">
               <div className="mb-2 flex items-center justify-between">
-                <h3 className="text-sm font-medium text-muted-foreground">菜单树</h3>
+                <h3 className="text-sm font-medium text-muted-foreground">{t('menu.title')} Tree</h3>
                 <Badge variant="secondary">
-                  共 {menus?.length || 0} 个菜单
+                  Total {menus?.length || 0}
                 </Badge>
               </div>
               {isLoading ? (
                 <div className="flex h-96 items-center justify-center rounded-lg border bg-background">
                   <div className="text-center">
                     <RefreshCw className="mx-auto h-8 w-8 animate-spin text-accent" />
-                    <p className="mt-2 text-sm text-muted-foreground">加载中...</p>
+                    <p className="mt-2 text-sm text-muted-foreground">Loading...</p>
                   </div>
                 </div>
               ) : (
@@ -226,7 +228,7 @@ export function MenuManagement() {
 
             {/* 右侧详情面板 */}
             <div>
-              <h3 className="mb-2 text-sm font-medium text-muted-foreground">菜单详情</h3>
+              <h3 className="mb-2 text-sm font-medium text-muted-foreground">Menu Details</h3>
               <div className="rounded-lg border bg-card p-4">
                 {selectedMenu ? (
                   <div className="space-y-4">
@@ -240,32 +242,32 @@ export function MenuManagement() {
                       </div>
                       <div>
                         <h4 className="font-semibold">{selectedMenu.name}</h4>
-                        <p className="text-xs text-muted-foreground">代码: {selectedMenu.code}</p>
+                        <p className="text-xs text-muted-foreground">Code: {selectedMenu.code}</p>
                       </div>
                     </div>
 
                     <div className="space-y-3">
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">类型</label>
+                        <label className="text-xs font-medium text-muted-foreground">{t('common.columns.type')}</label>
                         <div className="mt-1">
                           <Badge variant={selectedMenu.type === 'DIRECTORY' ? 'secondary' : 'default'}>
-                            {selectedMenu.type === 'DIRECTORY' ? '目录' : '菜单'}
+                            {selectedMenu.type === 'DIRECTORY' ? 'Directory' : 'Menu'}
                           </Badge>
                         </div>
                       </div>
 
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">状态</label>
+                        <label className="text-xs font-medium text-muted-foreground">{t('common.columns.status')}</label>
                         <div className="mt-1">
                           <Badge variant={selectedMenu.status === 'ACTIVE' ? 'default' : 'secondary'}>
-                            {selectedMenu.status === 'ACTIVE' ? '启用' : '停用'}
+                            {selectedMenu.status === 'ACTIVE' ? t('common.status.active') : t('common.status.inactive')}
                           </Badge>
                         </div>
                       </div>
 
                       {selectedMenu.path && (
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">路由路径</label>
+                          <label className="text-xs font-medium text-muted-foreground">{t('common.columns.path')}</label>
                           <p className="mt-1 text-sm flex items-center gap-1">
                             {selectedMenu.path}
                             <ExternalLink className="h-3 w-3 text-muted-foreground" />
@@ -275,14 +277,14 @@ export function MenuManagement() {
 
                       {selectedMenu.icon && (
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">图标</label>
+                          <label className="text-xs font-medium text-muted-foreground">{t('common.columns.icon')}</label>
                           <p className="mt-1 text-sm">{selectedMenu.icon}</p>
                         </div>
                       )}
 
                       {selectedMenu.parentId && (
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">上级菜单</label>
+                          <label className="text-xs font-medium text-muted-foreground">Parent Menu</label>
                           <p className="mt-1 text-sm">
                             {menus?.find(m => m.id === selectedMenu.parentId)?.name || '-'}
                           </p>
@@ -290,35 +292,28 @@ export function MenuManagement() {
                       )}
 
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">排序号</label>
+                        <label className="text-xs font-medium text-muted-foreground">{t('common.columns.sort')}</label>
                         <p className="mt-1 text-sm">{selectedMenu.sort || 0}</p>
                       </div>
 
                       {selectedMenu.description && (
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground">菜单描述</label>
+                          <label className="text-xs font-medium text-muted-foreground">{t('common.columns.description')}</label>
                           <p className="mt-1 text-sm">{selectedMenu.description}</p>
                         </div>
                       )}
 
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">子菜单数量</label>
+                        <label className="text-xs font-medium text-muted-foreground">Children Count</label>
                         <p className="mt-1 text-sm">
                           {menus?.filter(m => m.parentId === selectedMenu.id).length || 0}
                         </p>
                       </div>
 
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground">创建时间</label>
+                        <label className="text-xs font-medium text-muted-foreground">{t('common.columns.createdAt')}</label>
                         <p className="mt-1 text-sm">
                           {format(new Date(selectedMenu.createdAt), 'yyyy-MM-dd HH:mm:ss')}
-                        </p>
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-medium text-muted-foreground">更新时间</label>
-                        <p className="mt-1 text-sm">
-                          {format(new Date(selectedMenu.updatedAt), 'yyyy-MM-dd HH:mm:ss')}
                         </p>
                       </div>
                     </div>
@@ -330,7 +325,7 @@ export function MenuManagement() {
                         className="flex-1"
                         onClick={() => handleEdit(selectedNode!)}
                       >
-                        编辑
+                        {t('common.actions.edit')}
                       </Button>
                       <Button
                         size="sm"
@@ -338,14 +333,14 @@ export function MenuManagement() {
                         className="flex-1"
                         onClick={() => handleDelete(selectedNode!)}
                       >
-                        删除
+                        {t('common.actions.delete')}
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <div className="py-12 text-center">
                     <Menu className="mx-auto h-12 w-12 text-muted-foreground" />
-                    <p className="mt-2 text-sm text-muted-foreground">请选择一个菜单查看详情</p>
+                    <p className="mt-2 text-sm text-muted-foreground">Select a menu to view details</p>
                   </div>
                 )}
               </div>
@@ -363,7 +358,7 @@ export function MenuManagement() {
         onSuccess={() => {
           refetch()
           showToast(
-            editingMenu ? '菜单更新成功' : '菜单创建成功',
+            editingMenu ? 'Menu updated' : 'Menu created',
             'success'
           )
         }}

@@ -21,6 +21,7 @@ async function main() {
   const rootDept = await prisma.department.create({
     data: {
       name: '总公司',
+      nameEn: 'Headquarters',
       code: 'ROOT',
       level: 1,
       sort: 1,
@@ -30,6 +31,7 @@ async function main() {
   const techDept = await prisma.department.create({
     data: {
       name: '技术部',
+      nameEn: 'Technology Department',
       code: 'TECH',
       parentId: rootDept.id,
       level: 2,
@@ -40,6 +42,7 @@ async function main() {
   const hrDept = await prisma.department.create({
     data: {
       name: '人力资源部',
+      nameEn: 'Human Resources',
       code: 'HR',
       parentId: rootDept.id,
       level: 2,
@@ -53,6 +56,7 @@ async function main() {
   const systemMenu = await prisma.menu.create({
     data: {
       name: '系统管理',
+      nameEn: 'System Management',
       code: 'system',
       type: 'DIRECTORY',
       icon: 'Settings',
@@ -63,6 +67,7 @@ async function main() {
   const userMenu = await prisma.menu.create({
     data: {
       name: '用户管理',
+      nameEn: 'User Management',
       code: 'user',
       type: 'MENU',
       path: '/system/user',
@@ -75,6 +80,7 @@ async function main() {
   const deptMenu = await prisma.menu.create({
     data: {
       name: '部门管理',
+      nameEn: 'Department Management',
       code: 'department',
       type: 'MENU',
       path: '/system/department',
@@ -87,6 +93,7 @@ async function main() {
   const menuMenu = await prisma.menu.create({
     data: {
       name: '菜单管理',
+      nameEn: 'Menu Management',
       code: 'menu',
       type: 'MENU',
       path: '/system/menu',
@@ -99,6 +106,7 @@ async function main() {
   const permMenu = await prisma.menu.create({
     data: {
       name: '权限管理',
+      nameEn: 'Permission Management',
       code: 'permission',
       type: 'MENU',
       path: '/system/permission',
@@ -111,6 +119,7 @@ async function main() {
   const roleMenu = await prisma.menu.create({
     data: {
       name: '角色管理',
+      nameEn: 'Role Management',
       code: 'role',
       type: 'MENU',
       path: '/system/role',
@@ -126,36 +135,36 @@ async function main() {
   await prisma.permission.createMany({
     data: [
       // 用户管理权限
-      { code: 'user:view', name: '查看用户', menuId: userMenu.id, type: 'MENU' },
-      { code: 'user:create', name: '创建用户', menuId: userMenu.id, type: 'BUTTON' },
-      { code: 'user:edit', name: '编辑用户', menuId: userMenu.id, type: 'BUTTON' },
-      { code: 'user:delete', name: '删除用户', menuId: userMenu.id, type: 'BUTTON' },
-      { code: 'user:reset-pwd', name: '重置密码', menuId: userMenu.id, type: 'BUTTON' },
+      { code: 'user:view', name: '查看用户', nameEn: 'View User', menuId: userMenu.id, type: 'MENU' },
+      { code: 'user:create', name: '创建用户', nameEn: 'Create User', menuId: userMenu.id, type: 'BUTTON' },
+      { code: 'user:edit', name: '编辑用户', nameEn: 'Edit User', menuId: userMenu.id, type: 'BUTTON' },
+      { code: 'user:delete', name: '删除用户', nameEn: 'Delete User', menuId: userMenu.id, type: 'BUTTON' },
+      { code: 'user:reset-pwd', name: '重置密码', nameEn: 'Reset Password', menuId: userMenu.id, type: 'BUTTON' },
 
       // 部门管理权限
-      { code: 'dept:view', name: '查看部门', menuId: deptMenu.id, type: 'MENU' },
-      { code: 'dept:create', name: '创建部门', menuId: deptMenu.id, type: 'BUTTON' },
-      { code: 'dept:edit', name: '编辑部门', menuId: deptMenu.id, type: 'BUTTON' },
-      { code: 'dept:delete', name: '删除部门', menuId: deptMenu.id, type: 'BUTTON' },
+      { code: 'dept:view', name: '查看部门', nameEn: 'View Department', menuId: deptMenu.id, type: 'MENU' },
+      { code: 'dept:create', name: '创建部门', nameEn: 'Create Department', menuId: deptMenu.id, type: 'BUTTON' },
+      { code: 'dept:edit', name: '编辑部门', nameEn: 'Edit Department', menuId: deptMenu.id, type: 'BUTTON' },
+      { code: 'dept:delete', name: '删除部门', nameEn: 'Delete Department', menuId: deptMenu.id, type: 'BUTTON' },
 
       // 菜单管理权限
-      { code: 'menu:view', name: '查看菜单', menuId: menuMenu.id, type: 'MENU' },
-      { code: 'menu:create', name: '创建菜单', menuId: menuMenu.id, type: 'BUTTON' },
-      { code: 'menu:edit', name: '编辑菜单', menuId: menuMenu.id, type: 'BUTTON' },
-      { code: 'menu:delete', name: '删除菜单', menuId: menuMenu.id, type: 'BUTTON' },
+      { code: 'menu:view', name: '查看菜单', nameEn: 'View Menu', menuId: menuMenu.id, type: 'MENU' },
+      { code: 'menu:create', name: '创建菜单', nameEn: 'Create Menu', menuId: menuMenu.id, type: 'BUTTON' },
+      { code: 'menu:edit', name: '编辑菜单', nameEn: 'Edit Menu', menuId: menuMenu.id, type: 'BUTTON' },
+      { code: 'menu:delete', name: '删除菜单', nameEn: 'Delete Menu', menuId: menuMenu.id, type: 'BUTTON' },
 
       // 权限管理权限
-      { code: 'perm:view', name: '查看权限', menuId: permMenu.id, type: 'MENU' },
-      { code: 'perm:create', name: '创建权限', menuId: permMenu.id, type: 'BUTTON' },
-      { code: 'perm:edit', name: '编辑权限', menuId: permMenu.id, type: 'BUTTON' },
-      { code: 'perm:delete', name: '删除权限', menuId: permMenu.id, type: 'BUTTON' },
+      { code: 'perm:view', name: '查看权限', nameEn: 'View Permission', menuId: permMenu.id, type: 'MENU' },
+      { code: 'perm:create', name: '创建权限', nameEn: 'Create Permission', menuId: permMenu.id, type: 'BUTTON' },
+      { code: 'perm:edit', name: '编辑权限', nameEn: 'Edit Permission', menuId: permMenu.id, type: 'BUTTON' },
+      { code: 'perm:delete', name: '删除权限', nameEn: 'Delete Permission', menuId: permMenu.id, type: 'BUTTON' },
 
       // 角色管理权限
-      { code: 'role:view', name: '查看角色', menuId: roleMenu.id, type: 'MENU' },
-      { code: 'role:create', name: '创建角色', menuId: roleMenu.id, type: 'BUTTON' },
-      { code: 'role:edit', name: '编辑角色', menuId: roleMenu.id, type: 'BUTTON' },
-      { code: 'role:delete', name: '删除角色', menuId: roleMenu.id, type: 'BUTTON' },
-      { code: 'role:assign-perm', name: '分配权限', menuId: roleMenu.id, type: 'BUTTON' },
+      { code: 'role:view', name: '查看角色', nameEn: 'View Role', menuId: roleMenu.id, type: 'MENU' },
+      { code: 'role:create', name: '创建角色', nameEn: 'Create Role', menuId: roleMenu.id, type: 'BUTTON' },
+      { code: 'role:edit', name: '编辑角色', nameEn: 'Edit Role', menuId: roleMenu.id, type: 'BUTTON' },
+      { code: 'role:delete', name: '删除角色', nameEn: 'Delete Role', menuId: roleMenu.id, type: 'BUTTON' },
+      { code: 'role:assign-perm', name: '分配权限', nameEn: 'Assign Permission', menuId: roleMenu.id, type: 'BUTTON' },
     ],
   })
 
@@ -165,6 +174,7 @@ async function main() {
   const adminRole = await prisma.role.create({
     data: {
       name: '超级管理员',
+      nameEn: 'Super Admin',
       code: 'ADMIN',
       description: '拥有系统所有权限',
     },
@@ -173,6 +183,7 @@ async function main() {
   const userRole = await prisma.role.create({
     data: {
       name: '普通用户',
+      nameEn: 'Common User',
       code: 'USER',
       description: '普通用户角色',
     },

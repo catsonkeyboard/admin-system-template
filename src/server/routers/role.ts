@@ -11,7 +11,7 @@ export const roleRouter = router({
         keyword: z.string().optional(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const { page, pageSize, keyword } = input
       const skip = (page - 1) * pageSize
 
@@ -43,8 +43,13 @@ export const roleRouter = router({
         }),
       ])
 
+      const translatedItems = items.map((role) => ({
+        ...role,
+        name: (ctx.lang === 'en' ? role.nameEn : role.name) || role.name,
+      }))
+
       return {
-        items,
+        items: translatedItems,
         total,
         page,
         pageSize,
@@ -55,8 +60,8 @@ export const roleRouter = router({
   // 获取角色详情（包含权限）
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      return prisma.role.findUnique({
+    .query(async ({ input, ctx }) => {
+      const role = await prisma.role.findUnique({
         where: { id: input.id },
         include: {
           rolePermissions: {
@@ -70,6 +75,13 @@ export const roleRouter = router({
           },
         },
       })
+
+      if (!role) return null
+
+      return {
+        ...role,
+        name: (ctx.lang === 'en' ? role.nameEn : role.name) || role.name,
+      }
     }),
 
   // 创建角色
@@ -77,6 +89,7 @@ export const roleRouter = router({
     .input(
       z.object({
         name: z.string().min(1),
+        nameEn: z.string().optional(),
         code: z.string().min(1),
         status: z.enum(['ACTIVE', 'INACTIVE']).default('ACTIVE'),
         description: z.string().optional(),
@@ -109,6 +122,7 @@ export const roleRouter = router({
       z.object({
         id: z.string(),
         name: z.string().optional(),
+        nameEn: z.string().optional(),
         code: z.string().optional(),
         status: z.enum(['ACTIVE', 'INACTIVE']).optional(),
         description: z.string().optional(),

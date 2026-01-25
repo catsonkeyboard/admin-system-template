@@ -1,12 +1,15 @@
 import { useUserStore } from '@/client/stores/userStore'
 import { useNavigate } from 'react-router-dom'
 import { LogOut, User, Settings } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/client/components/ui/button'
 import { ModeToggle } from '@/client/components/mode-toggle'
+import { LanguageSwitcher } from '@/client/components/language-switcher'
 
 export function Header() {
   const navigate = useNavigate()
   const { user, logout } = useUserStore()
+  const { t } = useTranslation()
 
   const handleLogout = () => {
     logout()
@@ -20,10 +23,11 @@ export function Header() {
   return (
     <header className="flex h-14 items-center justify-between border-b border-border bg-background px-6">
       <div className="flex items-center gap-4">
-        <h2 className="text-lg font-semibold text-foreground">Admin 管理系统</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t('header.title')}</h2>
       </div>
 
       <div className="flex items-center gap-4">
+        <LanguageSwitcher />
         <ModeToggle />
 
         <div className="group relative">
@@ -32,21 +36,21 @@ export function Header() {
               {user ? getInitials(user.realName) : 'U'}
             </div>
             <div className="text-left">
-              <div className="text-sm font-medium">{user?.realName || '用户'}</div>
+              <div className="text-sm font-medium">{user?.realName || t('header.guest')}</div>
               <div className="text-xs text-muted-foreground">
-                {user?.department?.name || '未分配部门'}
+                {user?.department?.name || t('header.unassigned')}
               </div>
             </div>
           </Button>
 
-          <div className="absolute right-0 top-full mt-2 hidden w-48 rounded-md border border-border bg-popover py-2 shadow-lg group-hover:block">
+          <div className="absolute right-0 top-full mt-2 hidden w-48 rounded-md border border-border bg-popover py-2 shadow-lg group-hover:block z-50">
             <Button variant="ghost" className="flex w-full items-center gap-2 px-4 py-2 text-sm justify-start hover:bg-accent/10">
               <User className="h-4 w-4" />
-              个人信息
+              {t('header.profile')}
             </Button>
             <Button variant="ghost" className="flex w-full items-center gap-2 px-4 py-2 text-sm justify-start hover:bg-accent/10">
               <Settings className="h-4 w-4" />
-              系统设置
+              {t('header.settings')}
             </Button>
             <div className="my-1 border-t border-border"></div>
             <Button
@@ -55,7 +59,7 @@ export function Header() {
               className="flex w-full items-center gap-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 justify-start"
             >
               <LogOut className="h-4 w-4" />
-              退出登录
+              {t('header.logout')}
             </Button>
           </div>
         </div>
