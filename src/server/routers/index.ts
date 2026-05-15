@@ -1,18 +1,3 @@
-import { router } from '../trpc'
-import { authRouter } from './auth'
-import { userRouter } from './user'
-import { departmentRouter } from './department'
-import { menuRouter } from './menu'
-import { permissionRouter } from './permission'
-import { roleRouter } from './role'
-
-export const appRouter = router({
-  auth: authRouter,
-  user: userRouter,
-  department: departmentRouter,
-  menu: menuRouter,
-  permission: permissionRouter,
-  role: roleRouter,
-})
-
-export type AppRouter = typeof appRouter
+// 桥接文件 — 保持客户端 import 路径兼容
+// 客户端通过 import type { AppRouter } from '@/server/routers' 引用此类型
+export type { AppRouter } from "../trpc/trpc.router";

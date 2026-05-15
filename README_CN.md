@@ -1,6 +1,6 @@
 # Admin System Template
 
-企业级管理系统模板 - 基于 React + TypeScript + Prisma + tRPC 的全栈 RBAC 权限管理系统
+企业级管理系统模板 - 基于 React + TypeScript + Drizzle ORM + tRPC 的全栈 RBAC 权限管理系统
 
 [English](./README.md) | 中文文档
 
@@ -67,10 +67,7 @@ cd my-business-system
 # 安装依赖
 npm install
 
-# 生成 Prisma 客户端
-npm run db:generate
-
-# 创建数据库
+# 推送数据库结构（首次初始化）
 npm run db:push
 
 # 填充初始数据
@@ -108,9 +105,8 @@ npm run dev
 |------|------|------|
 | Node.js | 18+ | 运行时 |
 | TypeScript | 5 | 类型安全 |
-| tRPC | 10 | API 框架 |
-| Prisma | 5 | ORM |
-| Express | 4 | HTTP 服务 |
+| Drizzle ORM | 0.44+ | ORM |
+| Express | 5 | HTTP 服务 |
 | JWT | - | 认证 |
 | bcrypt | - | 密码加密 |
 
@@ -125,10 +121,10 @@ npm run dev
 
 ```
 admin-system-template/
-├── prisma/
-│   ├── schema.prisma           # 数据模型 (SQLite)
-│   ├── schema.production.prisma # 数据模型 (PostgreSQL)
-│   └── seed.ts                 # 种子数据
+├── src/server/db/           # 数据库层
+│   ├── schema.ts            # 数据模型 (SQLite / PostgreSQL)
+│   ├── index.ts             # Drizzle 实例
+│   └── seed.ts              # 种子数据
 ├── src/
 │   ├── client/                 # 前端代码
 │   │   ├── components/
@@ -266,11 +262,11 @@ DATABASE_URL="postgresql://user:password@host:5432/dbname"
 | `npm run dev` | 启动开发服务器 |
 | `npm run build` | 构建生产版本 |
 | `npm run start` | 启动生产服务器 |
-| `npm run db:generate` | 生成 Prisma 客户端 |
 | `npm run db:push` | 推送数据库结构 |
+| `npm run db:generate` | 生成迁移文件 |
 | `npm run db:migrate` | 运行数据库迁移 |
 | `npm run db:seed` | 填充种子数据 |
-| `npm run db:studio` | 打开 Prisma Studio |
+| `npm run db:studio` | 打开 Drizzle Studio |
 
 ---
 

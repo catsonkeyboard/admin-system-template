@@ -52,7 +52,7 @@
         "quickStart": "快速开始",
         "startGuide": {
             "title": "快速开始指南",
-            "p1": "后端 API 已完成（tRPC + Prisma）",
+            "p1": "后端 API 已完成（tRPC + Drizzle ORM）",
             "p2": "数据库设计已完成（7个核心表）",
             "p3": "用户认证和权限系统已实现",
             "p4": "完整的布局系统（侧边栏 + 头部 + Tab）"

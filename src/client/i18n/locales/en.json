@@ -52,7 +52,7 @@
         "quickStart": "Quick Start",
         "startGuide": {
             "title": "Quick Start Guide",
-            "p1": "Backend API (tRPC + Prisma) ready",
+            "p1": "Backend API (tRPC + Drizzle ORM) ready",
             "p2": "Database schema design ready (7 core tables)",
             "p3": "User authentication and permission system implemented",
             "p4": "Complete layout system (Sidebar + Header + Tab)"

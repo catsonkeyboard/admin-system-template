@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>企业级管理系统模板</strong><br>
-  基于 React + TypeScript + Prisma + tRPC 的全栈 RBAC 权限管理系统
+  基于 React + TypeScript + Drizzle ORM + tRPC 的全栈 RBAC 权限管理系统
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 
 ### Technical Highlights
 - **类型安全** - 端到端 TypeScript + tRPC
-- **现代技术栈** - React 18, Prisma 5, tRPC 10
+- **现代技术栈** - React 18, Drizzle ORM, tRPC 10
 - **状态管理** - Zustand (客户端) + React Query (服务端)
 - **UI 组件库** - shadcn/ui 风格组件 + Tailwind CSS
 - **树形组件** - 可复用的 TreeView 组件
@@ -49,7 +49,7 @@
 | API 层 | tRPC 10 |
 | 样式 | Tailwind CSS + shadcn/ui |
 | 路由 | React Router 6 |
-| ORM | Prisma 5 |
+| ORM | Drizzle ORM 0.44+ |
 | 数据库 | SQLite (开发) / PostgreSQL (生产) |
 | 认证 | JWT + bcrypt |
 
@@ -69,16 +69,13 @@ cd my-project
 # 2. 安装依赖
 npm install
 
-# 3. 生成 Prisma 客户端
-npm run db:generate
-
-# 4. 创建数据库
+# 3. 推送数据库结构（首次初始化）
 npm run db:push
 
-# 5. 填充初始数据
+# 4. 填充初始数据
 npm run db:seed
 
-# 6. 启动开发服务器
+# 5. 启动开发服务器
 npm run dev
 ```
 
@@ -104,26 +101,28 @@ cd my-business-system
 
 ### 添加新业务模块
 
-1. **定义数据模型** (`prisma/schema.prisma`)
-```prisma
-model Product {
-  id        String   @id @default(cuid())
-  name      String
-  price     Float
-  createdAt DateTime @default(now())
-}
+1. **定义数据模型** (`src/server/db/schema.ts`)
+```typescript
+export const products = sqliteTable('products', {
+  id:        text('id').primaryKey().$defaultFn(() => createId()),
+  name:      text('name').notNull(),
+  price:     real('price').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+})
 ```
 
 2. **创建 API 路由** (`src/server/routers/product.ts`)
 ```typescript
 export const productRouter = router({
   list: protectedProcedure.query(async () => {
-    return prisma.product.findMany()
+    return db.query.products.findMany()
   }),
   create: protectedProcedure
     .input(z.object({ name: z.string(), price: z.number() }))
     .mutation(async ({ input }) => {
-      return prisma.product.create({ data: input })
+      const id = createId()
+      await db.insert(products).values({ ...input, id })
+      return db.query.products.findFirst({ where: eq(products.id, id) })
     }),
 })
 ```
@@ -146,10 +145,10 @@ export const appRouter = router({
 ## Project Structure
 
 ```
-├── prisma/
-│   ├── schema.prisma         # 数据模型定义
-│   ├── schema.production.prisma  # 生产环境模型 (PostgreSQL)
-│   └── seed.ts               # 种子数据
+├── src/server/db/           # 数据库层
+│   ├── schema.ts            # 数据模型定义
+│   ├── index.ts             # Drizzle 实例
+│   └── seed.ts              # 种子数据
 ├── src/
 │   ├── client/               # 前端代码
 │   │   ├── components/
@@ -193,7 +192,7 @@ DATABASE_URL="file:./dev.db"
 DATABASE_URL="postgresql://user:password@host:5432/dbname"
 ```
 
-切换生产数据库时，复制 `prisma/schema.production.prisma` 到 `prisma/schema.prisma`。
+切换生产数据库时，将 `drizzle.config.ts` 中的 `dialect` 改为 `postgresql`，并将 `src/server/db/index.ts` 中的驱动改为 `postgres-js`。
 
 ## Available Scripts
 
@@ -202,11 +201,11 @@ DATABASE_URL="postgresql://user:password@host:5432/dbname"
 | `npm run dev` | 启动开发服务器 |
 | `npm run build` | 构建生产版本 |
 | `npm run start` | 启动生产服务器 |
-| `npm run db:generate` | 生成 Prisma 客户端 |
 | `npm run db:push` | 推送数据库结构 |
+| `npm run db:generate` | 生成迁移文件 |
 | `npm run db:migrate` | 运行数据库迁移 |
 | `npm run db:seed` | 填充种子数据 |
-| `npm run db:studio` | 打开 Prisma Studio |
+| `npm run db:studio` | 打开 Drizzle Studio |
 
 ## UI Components
 
