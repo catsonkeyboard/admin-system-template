@@ -1,76 +1,27 @@
-# 🚀 快速启动指南（已更新）
+# 🚀 快速启动指南
 
-## ✅ 项目已完成部分
+本指南帮助你在 5 分钟内跑起来这个项目。技术选型、架构设计等完整说明见 [README.md](./README.md)。
 
-### 后端（100% 完成）
-- ✅ Prisma Schema（7个数据表 + 关联）
-- ✅ 种子数据（初始管理员账号）
-- ✅ tRPC 路由（6个功能模块）
-- ✅ JWT 认证和权限中间件
-- ✅ 密码加密（bcrypt）
-- ✅ Express 服务器
+## 📋 技术栈概览
 
-### 前端（85% 完成）✨ **已大幅改进**
-- ✅ React + TypeScript 配置
-- ✅ Tailwind CSS + shadcn/ui 配置
-- ✅ Zustand 状态管理（user, tab, menu）
-- ✅ React Query + tRPC Client
-- ✅ 自定义 Hooks（useAuth, usePermission）
-- ✅ **完整的布局系统**（侧边栏 + 顶部栏 + Tab栏）⭐ **新增**
-- ✅ **功能齐全的首页**（统计卡片 + 快捷操作 + 系统状态）⭐ **新增**
-- ✅ **用户管理页面**（列表 + 搜索 + 分页）⭐ **新增**
-- ✅ **通用组件库**（DataTable）⭐ **新增**
-- ✅ 登录页面
-- ✅ 路由配置
-
-### 配置文件
-- ✅ package.json
-- ✅ tsconfig.json
-- ✅ vite.config.ts
-- ✅ tailwind.config.js
-- ✅ .env
-- ✅ .gitignore
-
----
-
-## 🎉 **最新改进亮点**
-
-### 1. 完整的布局系统 ⭐
-**新增组件**:
-- `Sidebar.tsx` - 可折叠侧边栏，支持树形菜单
-- `Header.tsx` - 顶部导航栏，显示用户信息
-- `TabBar.tsx` - 多页签切换，支持关闭操作
-
-**功能特性**:
-- ✅ 侧边栏可折叠/展开
-- ✅ 菜单图标 + 文字导航
-- ✅ 点击菜单自动添加 Tab
-- ✅ Tab 切换和关闭功能
-- ✅ 用户下拉菜单（个人信息、退出登录）
-
-### 2. 美观的首页仪表盘 ⭐
-- ✅ 欢迎横幅（显示用户名）
-- ✅ 统计卡片（用户数、部门数、角色数、权限数）
-- ✅ 快捷操作入口
-- ✅ 最近活动时间线
-- ✅ 系统状态监控
-
-### 3. 实用的用户管理页面 ⭐
-- ✅ 用户列表展示
-- ✅ 搜索功能
-- ✅ 分页功能
-- ✅ 编辑/删除操作
-- ✅ 状态标签显示
-
-### 4. 通用组件库 ⭐
-- ✅ `DataTable` - 可复用的数据表格组件
-- 支持自定义列
-- 支持自定义渲染
-- 内置操作按钮
-
----
+| 层级 | 技术 |
+|------|------|
+| 前端框架 | React 19 + TypeScript 5 |
+| 状态管理 | Zustand + React Query |
+| API 层 | tRPC 11 + REST (Swagger) |
+| 后端框架 | NestJS 11 (Express 平台) |
+| ORM | Drizzle ORM |
+| 数据库 | SQLite (开发，better-sqlite3) / PostgreSQL (生产) |
+| 样式 | Tailwind CSS v4 + shadcn/ui |
+| 国际化 | i18next + react-i18next |
+| 图表 | ECharts 6 |
+| 认证 | JWT + bcrypt |
 
 ## 📦 安装步骤
+
+### 环境要求
+- Node.js 18+
+- npm 或 yarn
 
 ### 1. 安装依赖
 ```bash
@@ -79,216 +30,102 @@ npm install
 
 ### 2. 初始化数据库
 ```bash
-# 生成 Prisma Client
-npm run db:generate
-
-# 创建数据库表
+# 推送数据库结构（Drizzle 根据 src/server/db/schema.ts 创建表）
 npm run db:push
 
-# 运行种子数据（创建默认管理员账号）
+# 填充种子数据（创建默认管理员账号、菜单、角色、权限）
 npm run db:seed
 ```
 
 ### 3. 启动项目
 ```bash
-# 同时启动前端和后端
+# 同时启动 NestJS 后端 (watch) 和 Vite 前端
 npm run dev
 
 # 或分别启动
-npm run dev:server  # 后端服务器 http://localhost:3001
-npm run dev:client  # 前端开发服务器 http://localhost:3000
+npm run dev:server  # NestJS 后端 http://localhost:3002（热重载）
+npm run dev:client  # Vite 前端 http://localhost:3000
 ```
 
 ### 4. 访问应用
-- 前端地址：http://localhost:3000
-- 默认账号：**admin** / **admin123**
+- **前端**: http://localhost:3000
+- **后端 (NestJS)**: http://localhost:3002
+- **tRPC 端点**: http://localhost:3002/trpc （Vite 已配置 `/trpc` 代理，前端直接调用即可）
+- **Swagger 文档**: http://localhost:3002/api-docs
+- **默认账号**: **admin** / **admin123**
+
+### 一键启动（首次）
+```bash
+npm install && npm run db:push && npm run db:seed && npm run dev
+```
 
 ---
 
-## 🎯 **体验新功能**
+## 🏗️ 架构速览
 
-### 登录后您将看到：
+后端采用 NestJS 模块化架构，tRPC 通过 Express 中间件挂载到 NestJS 应用上：
 
-1. **完整的管理界面**
-   - 左侧：可折叠的侧边栏导航
-   - 顶部：用户信息和快捷菜单
-   - Tab栏：多页签切换
-   - 主内容区：功能页面
-
-2. **美观的首页仪表盘**
-   - 系统统计卡片
-   - 快捷操作按钮
-   - 最近活动列表
-   - 系统状态监控
-
-3. **用户管理功能**
-   - 点击侧边栏"用户管理"
-   - 查看用户列表
-   - 测试搜索和分页
-   - 体验编辑/删除操作
-
-4. **多页签体验**
-   - 点击不同菜单项
-   - 观察 Tab 自动添加
-   - 切换和关闭 Tab
-
----
-
-## 📂 项目结构（已更新）
+- **tRPC 端点** (`/trpc`)：前端唯一调用入口，`protectedProcedure` 校验 JWT，类型端到端推导
+- **REST 端点** (`/api/*`)：每个模块的 Controller 提供等价的 REST API，全局 `JwtAuthGuard` 守卫（`@Public()` 装饰器标记公开接口），Swagger 文档自动生成于 `/api-docs`
+- **业务逻辑** 统一收敛在各模块的 Service 中，tRPC Router 与 REST Controller 只做协议适配
 
 ```
-admin-system/
-├── prisma/
-│   ├── schema.prisma       # 数据库模型
-│   ├── seed.ts            # 种子数据
-│   └── dev.db             # SQLite 数据库文件
+请求 ──┬── /trpc ──→ TrpcRouter ──→ 各模块 Router ──┐
+       │                                            ├──→ Service ──→ Drizzle ──→ DB
+       └── /api  ──→ JwtAuthGuard ──→ Controller ───┘
+```
+
+---
+
+## 📂 项目结构
+
+```
+admin-system-template/
 ├── src/
-│   ├── server/            # 后端代码
-│   │   ├── routers/       # tRPC 路由
-│   │   │   ├── auth.ts    # 认证
-│   │   │   ├── user.ts    # 用户管理
-│   │   │   ├── department.ts  # 部门管理
-│   │   │   ├── menu.ts    # 菜单管理
-│   │   │   ├── permission.ts  # 权限管理
-│   │   │   ├── role.ts    # 角色管理
-│   │   │   └── index.ts   # 路由汇总
-│   │   ├── utils/         # 工具函数
-│   │   │   ├── jwt.ts     # JWT 认证
-│   │   │   └── password.ts # 密码加密
-│   │   ├── trpc.ts        # tRPC 配置
-│   │   └── index.ts       # 服务器入口
-│   └── client/            # 前端代码
-│       ├── stores/        # Zustand 状态管理
-│       ├── hooks/         # 自定义 Hooks
-│       ├── utils/         # 工具函数
-│       ├── components/    # 组件
-│       │   ├── layout/   # 布局组件 ⭐ **新增**
-│       │   │   ├── AppLayout.tsx
-│       │   │   ├── Sidebar.tsx
-│       │   │   ├── Header.tsx
-│       │   │   └── TabBar.tsx
-│       │   ├── common/   # 通用组件 ⭐ **新增**
-│       │   │   └── DataTable.tsx
-│       │   ├── ui/       # shadcn 组件
-│       │   └── modules/  # 业务模块组件
-│       ├── pages/        # 页面
-│       │   ├── Login.tsx
-│       │   ├── Home.tsx  # ⭐ **已改进**
-│       │   └── UserManagement.tsx ⭐ **新增**
-│       ├── App.tsx       # App 根组件
-│       └── main.tsx      # 入口文件
-├── .env                  # 环境变量
-├── package.json
-├── QUICKSTART.md         # 本文档
-├── IMPROVEMENTS.md       # 改进说明 ⭐ **新增**
-└── README.md            # 项目说明
+│   ├── server/                    # 后端代码 (NestJS)
+│   │   ├── main.ts                # 应用入口 (Swagger + tRPC 中间件挂载)
+│   │   ├── app.module.ts          # 根模块 (全局 JWT 守卫)
+│   │   ├── common/
+│   │   │   ├── decorators/        # 装饰器 (@Public 等)
+│   │   │   └── guards/            # 守卫 (JwtAuthGuard)
+│   │   ├── database/              # DatabaseModule (注入 Drizzle 实例)
+│   │   ├── db/                    # 数据库层
+│   │   │   ├── schema.ts          # Drizzle 数据模型定义
+│   │   │   ├── index.ts           # Drizzle 实例 (better-sqlite3)
+│   │   │   └── seed.ts            # 种子数据
+│   │   ├── modules/               # 业务模块
+│   │   │   ├── auth/              # 认证
+│   │   │   ├── user/              # 用户管理
+│   │   │   ├── department/        # 部门管理
+│   │   │   ├── menu/              # 菜单管理
+│   │   │   ├── permission/        # 权限管理
+│   │   │   └── role/              # 角色管理
+│   │   │       # 每个模块含:
+│   │   │       # <module>.module.ts      NestJS 模块
+│   │   │       # <module>.service.ts     业务逻辑
+│   │   │       # <module>.controller.ts  REST 接口 (Swagger)
+│   │   │       # <module>.router.ts      tRPC 路由工厂
+│   │   │       # dto/                    REST DTO
+│   │   ├── routers/               # AppRouter 类型桥接 (供客户端 import type)
+│   │   ├── trpc/                  # TrpcService / TrpcRouter / TrpcModule
+│   │   └── utils/                 # 服务端工具 (jwt, password)
+│   └── client/                    # 前端代码
+│       ├── components/
+│       │   ├── common/            # 通用组件 (DataTable, TreeView)
+│       │   ├── layout/            # 布局组件 (Sidebar, Header, TabBar)
+│       │   ├── modules/           # 业务组件 (各模块表单)
+│       │   └── ui/                # 基础 UI 组件 (shadcn/ui 风格)
+│       ├── hooks/                 # 自定义 Hooks (useAuth, usePermission)
+│       ├── i18n/                  # 国际化配置与语言包
+│       ├── pages/                 # 页面组件 (含 dashboard 图表页)
+│       ├── stores/                # Zustand 状态 (user, tab, menu)
+│       └── utils/                 # 工具函数
+├── .env                           # 环境变量 (开发)
+├── drizzle.config.ts              # Drizzle Kit 配置
+├── nest-cli.json                  # NestJS CLI 配置
+├── vite.config.ts                 # Vite 配置 (端口 3000, /trpc 代理到 3002)
+└── package.json
 ```
-
----
-
-## 🎨 **新增功能详解**
-
-### 1. Sidebar（侧边栏）
-**文件**: `src/client/components/layout/Sidebar.tsx`
-
-**功能**:
-- 可折叠/展开（点击底部按钮）
-- 图标 + 文字导航
-- 支持树形菜单（系统管理 > 用户管理）
-- 点击菜单自动添加 Tab 并导航
-- 默认菜单配置（首页、系统管理等）
-
-**使用**:
-```typescript
-// 已集成在 AppLayout 中，无需手动调用
-<Sidebar />
-```
-
-### 2. Header（顶部栏）
-**文件**: `src/client/components/layout/Header.tsx`
-
-**功能**:
-- 显示用户头像（首字母）
-- 显示用户姓名和部门
-- 用户下拉菜单
-- 个人信息入口
-- 退出登录
-
-**使用**:
-```typescript
-// 已集成在 AppLayout 中
-<Header />
-```
-
-### 3. TabBar（多页签）
-**文件**: `src/client/components/layout/TabBar.tsx`
-
-**功能**:
-- 显示已打开的页面
-- 点击切换页面
-- 关闭单个 Tab（X 按钮）
-- 更多操作菜单（关闭其他、关闭所有）
-- 当前 Tab 高亮显示
-
-**使用**:
-```typescript
-// 已集成在 AppLayout 中
-<TabBar />
-```
-
-### 4. DataTable（数据表格）
-**文件**: `src/client/components/common/DataTable.tsx`
-
-**功能**:
-- 自定义列配置
-- 自定义渲染函数
-- 内置编辑/删除操作
-- 加载状态
-- 空数据提示
-
-**使用示例**:
-```typescript
-import { DataTable } from '@/client/components/common/DataTable'
-
-const columns = [
-  { key: 'username', title: '用户名' },
-  { key: 'realName', title: '姓名' },
-  {
-    key: 'status',
-    title: '状态',
-    render: (status) => <Badge>{status}</Badge>
-  },
-]
-
-<DataTable
-  columns={columns}
-  data={users}
-  loading={isLoading}
-  onEdit={handleEdit}
-  onDelete={handleDelete}
-/>
-```
-
-### 5. 改进的首页
-**文件**: `src/client/pages/Home.tsx`
-
-**新增内容**:
-- 欢迎横幅（个性化问候）
-- 统计卡片（4个关键指标）
-- 快捷操作（4个常用功能）
-- 最近活动时间线
-- 系统状态监控
-
-### 6. 用户管理页面
-**文件**: `src/client/pages/UserManagement.tsx`
-
-**功能**:
-- 用户列表展示
-- 搜索框（用户名、姓名、手机号）
-- 分页控制
-- 状态标签（正常/停用）
-- 编辑/删除操作
-- 新建用户按钮
 
 ---
 
@@ -296,118 +133,113 @@ const columns = [
 
 ```bash
 # 开发
-npm run dev              # 启动前后端
-npm run dev:server       # 仅启动后端
-npm run dev:client       # 仅启动前端
+npm run dev              # 同时启动 NestJS 后端 + Vite 前端
+npm run dev:server       # 仅启动 NestJS 后端（端口 3002，热重载）
+npm run dev:client       # 仅启动 Vite 前端（端口 3000）
 
-# 数据库
-npm run db:generate      # 生成 Prisma Client
-npm run db:push          # 推送 Schema 到数据库
-npm run db:migrate       # 创建数据库迁移
-npm run db:seed          # 运行种子数据
-npm run db:studio        # 打开 Prisma Studio
+# 数据库 (Drizzle Kit)
+npm run db:push          # 推送 schema 到数据库（开发环境快速同步）
+npm run db:generate      # 根据 schema 变更生成迁移文件
+npm run db:migrate       # 运行数据库迁移
+npm run db:seed          # 运行种子数据 (tsx src/server/db/seed.ts)
+npm run db:studio        # 打开 Drizzle Studio（可视化查看/编辑数据）
 
-# 构建
-npm run build            # 构建项目
-npm run build:server     # 构建后端
-npm start                # 启动生产服务器
+# 构建与生产
+npm run build            # 构建前端生产版本 (vite build)
+npm run build:server     # 构建后端 (nest build)
+npm start                # 启动生产服务器 (node dist/main.js)
 ```
 
 ---
 
-## 📋 功能清单
+## 🎯 功能清单
 
-### ✅ 已实现
-- [x] 用户登录认证
-- [x] JWT Token 管理
-- [x] 权限验证（后端）
-- [x] 完整的布局系统（Sidebar + Header + TabBar）⭐
-- [x] 多页签切换功能 ⭐
-- [x] 用户列表展示 ⭐
-- [x] 搜索和分页 ⭐
-- [x] 美观的首页仪表盘 ⭐
-- [x] 通用数据表格组件 ⭐
-- [x] 状态管理（Zustand）
-- [x] API 调用（tRPC）
+登录后你将看到完整的管理界面：
 
-### 📝 待添加（参考实现指南文档）
-- [ ] 新建/编辑用户表单
-- [ ] 用户删除确认对话框
-- [ ] 部门管理（树形）
-- [ ] 菜单管理（树形）
-- [ ] 权限管理
-- [ ] 角色权限配置
-- [ ] 按钮级权限控制
-- [ ] 数据权限过滤
+1. **布局系统**
+   - 左侧：可折叠的侧边栏导航（树形菜单）
+   - 顶部：用户信息、语言切换（中/英）、明暗主题切换
+   - Tab 栏：多页签切换与关闭
+
+2. **首页仪表盘**
+   - 统计卡片、快捷操作
+   - ECharts 数据看板（dashboard 图表页）
+
+3. **系统管理模块**（每个模块均为完整 CRUD）
+   - 用户管理：列表、搜索、分页、角色分配、重置密码
+   - 部门管理：树形组织架构
+   - 菜单管理：动态菜单配置
+   - 角色管理：角色 CRUD、权限配置
+   - 权限管理：细粒度权限（菜单/按钮/数据）
+
+4. **国际化**
+   - 中英文切换（i18next），语言包位于 `src/client/i18n/`
 
 ---
 
-## 🎯 下一步操作
+## ➕ 添加新业务模块
 
-### 选项 A：体验现有功能
-1. **启动项目**: `npm run dev`
-2. **登录系统**: admin / admin123
-3. **探索界面**:
-   - 折叠/展开侧边栏
-   - 点击不同菜单项
-   - 观察 Tab 添加和切换
-   - 查看用户管理列表
-   - 测试搜索和分页
+以 `product` 模块为例，完整步骤（含代码示例）见 [README.md](./README.md#usage) 的 Usage 章节，概要如下：
 
-### 选项 B：添加完整功能（推荐）
-参考 **`implementation_guide_part3.md`** 文档，复制相应的代码即可：
+1. **定义数据模型** — 在 `src/server/db/schema.ts` 中添加 Drizzle 表定义
+2. **创建 Service** — `src/server/modules/product/product.service.ts`，通过 `@Inject(DRIZZLE)` 注入数据库实例
+3. **创建 tRPC Router** — `src/server/modules/product/product.router.ts`，用 `trpc.protectedProcedure` 定义受保护接口
+4. **（可选）创建 REST Controller** — `product.controller.ts` + `dto/`，用 Swagger 装饰器标注后自动出现在 `/api-docs`
+5. **创建 Module** — `product.module.ts`，声明 providers/controllers 并导出 Service
+6. **注册模块** — 在 `src/server/trpc/trpc.module.ts` 的 `imports` 中加入 `ProductModule`，在 `src/server/trpc/trpc.router.ts` 的 `appRouter` 中挂载 `product` 路由
+7. **创建页面** — `src/client/pages/ProductManagement.tsx`，并在 `src/client/App.tsx` 中添加路由
+8. **同步数据库** — `npm run db:push`
 
-1. **完善用户管理**
-   - 新建用户表单（带验证）
-   - 编辑用户功能
-   - 删除确认对话框
-   - 角色分配
+---
 
-2. **添加部门管理**
-   - 树形展示组件
-   - 新增/编辑/删除部门
-   - 层级管理
+## 🔐 API 调用方式
 
-3. **添加其他模块**
-   - 菜单管理
-   - 权限管理
-   - 角色管理
+### 前端（tRPC，推荐）
+```typescript
+// 类型安全，自动推导后端路由类型
+const { data } = trpc.user.list.useQuery({ page: 1, pageSize: 10 })
+```
 
-### 选项 C：自定义开发
-基于现有框架扩展您的需求：
-- 修改主题颜色
-- 添加新的统计卡片
-- 创建自定义页面
-- 扩展业务逻辑
+### 第三方集成（REST）
+REST 接口默认受全局 `JwtAuthGuard` 保护，请求需携带 Token：
+```bash
+curl -H "Authorization: Bearer <token>" http://localhost:3002/api/users
+```
+完整接口列表和在线调试见 Swagger 文档：http://localhost:3002/api-docs
 
 ---
 
 ## 🐛 故障排查
 
-### 数据库连接错误
+### 数据库相关错误（表不存在等）
 ```bash
-# 确保已创建数据库
-npm run db:push
+# 确保已推送数据库结构并填充种子数据
+npm run db:push && npm run db:seed
 ```
 
 ### 端口被占用
-```bash
-# 修改 .env 文件中的 PORT
-PORT=3002
-```
+- 后端端口 3002 在 `package.json` 的 `dev:server` 脚本中通过 `cross-env PORT=3002` 指定，可修改该脚本或设置环境变量
+- 前端端口 3000 在 `vite.config.ts` 中配置；若修改后端端口，需同步更新 `vite.config.ts` 中 `/trpc` 的代理目标
 
 ### 依赖安装问题
 ```bash
-# 清除缓存重新安装
+# 清除缓存重新安装（better-sqlite3 含原生模块，Node 版本切换后需要重装）
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-### 页面空白
+### 页面空白 / 请求失败
 ```bash
-# 检查控制台错误
-# 确保后端服务器正在运行
+# 检查浏览器控制台错误
+# 确保 NestJS 后端正在运行（前端的 /trpc 请求依赖它）
 npm run dev:server
+```
+
+### 登录失败（账号不存在）
+```bash
+# 种子数据未运行，执行：
+npm run db:seed
+# 默认账号 admin / admin123
 ```
 
 ---
@@ -415,68 +247,20 @@ npm run dev:server
 ## 📞 获取帮助
 
 ### 文档资源
-- 📘 **QUICKSTART.md** - 快速启动指南（本文档）
-- 📗 **IMPROVEMENTS.md** - 改进说明文档 ⭐
-- 📕 **implementation_guide.md** - 完整实现指南（第1部分）
-- 📙 **implementation_guide_part2.md** - 完整实现指南（第2部分）
-- 📓 **implementation_guide_part3.md** - 完整实现指南（第3部分）
-- 📔 **notes.md** - 技术研究和最佳实践
-- 📖 **PROJECT_SUMMARY.md** - 项目总结
+- 📘 **QUICKSTART.md** — 快速启动指南（本文档）
+- 📖 **README.md / README_CN.md** — 项目完整说明（架构、扩展、部署）
 
 ### 在线资源
+- [NestJS 官方文档](https://docs.nestjs.com)
 - [tRPC 官方文档](https://trpc.io/docs)
-- [Prisma 官方文档](https://www.prisma.io/docs)
+- [Drizzle ORM 官方文档](https://orm.drizzle.team)
 - [shadcn/ui 组件库](https://ui.shadcn.com)
+- [Tailwind CSS v4](https://tailwindcss.com)
 - [Zustand 文档](https://zustand-demo.pmnd.rs)
+- [i18next 文档](https://www.i18next.com)
+- [ECharts 文档](https://echarts.apache.org)
 - [Lucide Icons](https://lucide.dev)
 
 ---
 
-## 🎉 开始您的开发之旅
-
-### 立即开始（一键命令）
-```bash
-# 安装依赖 + 初始化数据库 + 启动项目
-npm install && npm run db:generate && npm run db:push && npm run db:seed && npm run dev
-```
-
-### 分步执行
-```bash
-# 1. 安装依赖
-npm install
-
-# 2. 初始化数据库
-npm run db:generate && npm run db:push && npm run db:seed
-
-# 3. 启动项目
-npm run dev
-
-# 4. 打开浏览器访问 http://localhost:3000
-# 5. 使用 admin / admin123 登录
-```
-
----
-
-## ⭐ **项目改进总结**
-
-### 改进前（v1.0）
-- ✅ 基础框架
-- ✅ 登录功能
-- ❌ 空白布局
-- ❌ 没有实际功能
-
-### 改进后（v1.1）⭐
-- ✅ 完整的企业级布局
-- ✅ 多页签系统
-- ✅ 用户管理功能
-- ✅ 美观的首页仪表盘
-- ✅ 可复用组件库
-
-**项目完成度**: 60% → 85% ⬆️
-
----
-
 **祝您开发愉快！🚀**
-
-最后更新：2024-01-18
-下一次迭代重点：添加完整的 CRUD 表单 + 更多功能模块

@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>企业级管理系统模板</strong><br>
-  基于 React + TypeScript + Drizzle ORM + tRPC 的全栈 RBAC 权限管理系统
+  基于 React + TypeScript + NestJS + Drizzle ORM + tRPC 的全栈 RBAC 权限管理系统
 </p>
 
 <p align="center">
@@ -32,26 +32,47 @@
 - **菜单管理** - 动态菜单系统
 - **角色管理** - 角色 CRUD，权限配置
 - **权限管理** - 细粒度权限控制（菜单/按钮/数据）
+- **国际化** - 中英文切换（i18next）
+- **数据看板** - ECharts 图表仪表盘
 
 ### Technical Highlights
-- **类型安全** - 端到端 TypeScript + tRPC
-- **现代技术栈** - React 18, Drizzle ORM, tRPC 10
+- **NestJS 模块化后端** - 每个业务域独立 Module（Service / Controller / Router / DTO）
+- **双 API 形态** - tRPC（前端类型安全调用）+ REST（Swagger/OpenAPI 文档，供第三方集成）
+- **类型安全** - 端到端 TypeScript + tRPC，前端直接推导后端路由类型
+- **现代技术栈** - React 19, NestJS 11, Drizzle ORM, tRPC 11
 - **状态管理** - Zustand (客户端) + React Query (服务端)
-- **UI 组件库** - shadcn/ui 风格组件 + Tailwind CSS
+- **UI 组件库** - shadcn/ui 风格组件 + Tailwind CSS v4
 - **树形组件** - 可复用的 TreeView 组件
 
 ## Tech Stack
 
 | 层级 | 技术 |
 |------|------|
-| 前端框架 | React 18 + TypeScript 5 |
+| 前端框架 | React 19 + TypeScript 5 |
 | 状态管理 | Zustand + React Query |
-| API 层 | tRPC 10 |
-| 样式 | Tailwind CSS + shadcn/ui |
-| 路由 | React Router 6 |
-| ORM | Drizzle ORM 0.44+ |
+| API 层 | tRPC 11 + REST (Swagger) |
+| 后端框架 | NestJS 11 (Express 平台) |
+| 样式 | Tailwind CSS v4 + shadcn/ui |
+| 路由 | React Router 7 |
+| 国际化 | i18next + react-i18next |
+| 图表 | ECharts 6 |
+| ORM | Drizzle ORM 0.45+ |
 | 数据库 | SQLite (开发) / PostgreSQL (生产) |
 | 认证 | JWT + bcrypt |
+
+## Architecture
+
+后端采用 NestJS 模块化架构，tRPC 通过 Express 中间件挂载到 NestJS 应用上：
+
+- **tRPC 端点** (`/trpc`)：前端唯一调用入口，`protectedProcedure` 校验 JWT，类型端到端推导
+- **REST 端点** (`/api/*`)：每个模块的 Controller 提供等价的 REST API，全局 `JwtAuthGuard` 守卫（`@Public()` 装饰器标记公开接口），Swagger 文档自动生成
+- **业务逻辑** 统一收敛在各模块的 Service 中，tRPC Router 与 REST Controller 只做协议适配
+
+```
+请求 ──┬── /trpc ──→ TrpcRouter ──→ 各模块 Router ──┐
+       │                                            ├──→ Service ──→ Drizzle ──→ DB
+       └── /api  ──→ JwtAuthGuard ──→ Controller ───┘
+```
 
 ## Quick Start
 
@@ -75,13 +96,16 @@ npm run db:push
 # 4. 填充初始数据
 npm run db:seed
 
-# 5. 启动开发服务器
+# 5. 启动开发服务器（同时启动 NestJS 后端 + Vite 前端）
 npm run dev
 ```
 
 ### Access
 
-- **地址**: http://localhost:3000
+- **前端**: http://localhost:3000
+- **后端 (NestJS)**: http://localhost:3002
+- **tRPC 端点**: http://localhost:3002/trpc （Vite 已配置 `/trpc` 代理）
+- **Swagger 文档**: http://localhost:3002/api-docs
 - **账号**: admin
 - **密码**: admin123
 
@@ -101,6 +125,8 @@ cd my-business-system
 
 ### 添加新业务模块
 
+以 `product` 模块为例：
+
 1. **定义数据模型** (`src/server/db/schema.ts`)
 ```typescript
 export const products = sqliteTable('products', {
@@ -111,33 +137,53 @@ export const products = sqliteTable('products', {
 })
 ```
 
-2. **创建 API 路由** (`src/server/routers/product.ts`)
+2. **创建 Service** (`src/server/modules/product/product.service.ts`)
 ```typescript
-export const productRouter = router({
-  list: protectedProcedure.query(async () => {
-    return db.query.products.findMany()
-  }),
-  create: protectedProcedure
-    .input(z.object({ name: z.string(), price: z.number() }))
-    .mutation(async ({ input }) => {
-      const id = createId()
-      await db.insert(products).values({ ...input, id })
-      return db.query.products.findFirst({ where: eq(products.id, id) })
-    }),
-})
+@Injectable()
+export class ProductService {
+  constructor(@Inject(DRIZZLE) private db: DB) {}
+
+  async list() {
+    return this.db.query.products.findMany()
+  }
+
+  async create(input: { name: string; price: number }) {
+    const id = createId()
+    await this.db.insert(products).values({ ...input, id })
+    return this.db.query.products.findFirst({ where: eq(products.id, id) })
+  }
+}
 ```
 
-3. **注册路由** (`src/server/routers/index.ts`)
+3. **创建 tRPC Router** (`src/server/modules/product/product.router.ts`)
 ```typescript
-export const appRouter = router({
-  // ... existing routers
-  product: productRouter,
-})
+export function createProductRouter(trpc: TrpcService, productService: ProductService) {
+  return trpc.router({
+    list: trpc.protectedProcedure.query(() => productService.list()),
+    create: trpc.protectedProcedure
+      .input(z.object({ name: z.string(), price: z.number() }))
+      .mutation(({ input }) => productService.create(input)),
+  })
+}
 ```
 
-4. **创建页面** (`src/client/pages/ProductManagement.tsx`)
+4. **（可选）创建 REST Controller** (`src/server/modules/product/product.controller.ts`)，用 `@ApiTags` 等 Swagger 装饰器标注，即可自动出现在 `/api-docs`
 
-5. **添加路由** (`src/client/App.tsx`)
+5. **创建 Module** (`src/server/modules/product/product.module.ts`)
+```typescript
+@Module({
+  controllers: [ProductController],
+  providers: [ProductService],
+  exports: [ProductService],
+})
+export class ProductModule {}
+```
+
+6. **注册模块**
+   - 在 `src/server/trpc/trpc.module.ts` 的 `imports` 中加入 `ProductModule`
+   - 在 `src/server/trpc/trpc.router.ts` 的 `appRouter` 中挂载 `product: createProductRouter(this.trpc, this.productService)`
+
+7. **创建页面** (`src/client/pages/ProductManagement.tsx`)，并在 `src/client/App.tsx` 中添加路由
 ```typescript
 <Route path="product" element={<ProductManagement />} />
 ```
@@ -145,26 +191,42 @@ export const appRouter = router({
 ## Project Structure
 
 ```
-├── src/server/db/           # 数据库层
-│   ├── schema.ts            # 数据模型定义
-│   ├── index.ts             # Drizzle 实例
-│   └── seed.ts              # 种子数据
 ├── src/
-│   ├── client/               # 前端代码
+│   ├── client/                    # 前端代码
 │   │   ├── components/
-│   │   │   ├── common/       # 通用组件 (DataTable, TreeView)
-│   │   │   ├── layout/       # 布局组件 (Sidebar, Header, TabBar)
-│   │   │   ├── modules/      # 业务组件 (各模块表单)
-│   │   │   └── ui/           # 基础 UI 组件
-│   │   ├── hooks/            # 自定义 Hooks
-│   │   ├── pages/            # 页面组件
-│   │   ├── stores/           # Zustand 状态
-│   │   └── utils/            # 工具函数
-│   └── server/               # 后端代码
-│       ├── routers/          # tRPC 路由
-│       └── utils/            # 服务端工具
-├── .env                      # 环境变量 (开发)
-├── .env.production           # 环境变量 (生产)
+│   │   │   ├── common/            # 通用组件 (DataTable, TreeView)
+│   │   │   ├── layout/            # 布局组件 (Sidebar, Header, TabBar)
+│   │   │   ├── modules/           # 业务组件 (各模块表单)
+│   │   │   └── ui/                # 基础 UI 组件
+│   │   ├── hooks/                 # 自定义 Hooks
+│   │   ├── i18n/                  # 国际化配置与语言包
+│   │   ├── pages/                 # 页面组件 (含 dashboard 图表页)
+│   │   ├── stores/                # Zustand 状态
+│   │   └── utils/                 # 工具函数
+│   └── server/                    # 后端代码 (NestJS)
+│       ├── main.ts                # 应用入口 (Swagger + tRPC 中间件挂载)
+│       ├── app.module.ts          # 根模块 (全局 JWT 守卫)
+│       ├── common/
+│       │   ├── decorators/        # 装饰器 (@Public 等)
+│       │   └── guards/            # 守卫 (JwtAuthGuard)
+│       ├── database/              # DatabaseModule (注入 Drizzle 实例)
+│       ├── db/                    # 数据库层
+│       │   ├── schema.ts          # 数据模型定义
+│       │   ├── index.ts           # Drizzle 实例
+│       │   └── seed.ts            # 种子数据
+│       ├── modules/               # 业务模块 (auth/user/department/menu/permission/role)
+│       │   └── <module>/
+│       │       ├── <module>.module.ts       # NestJS 模块
+│       │       ├── <module>.service.ts      # 业务逻辑
+│       │       ├── <module>.controller.ts   # REST 接口 (Swagger)
+│       │       ├── <module>.router.ts       # tRPC 路由工厂
+│       │       └── dto/                     # REST DTO
+│       ├── routers/               # AppRouter 类型桥接 (供客户端 import type)
+│       ├── trpc/                  # TrpcService / TrpcRouter / TrpcModule
+│       └── utils/                 # 服务端工具 (jwt, password)
+├── .env                           # 环境变量 (开发)
+├── nest-cli.json                  # NestJS CLI 配置
+├── vite.config.ts                 # Vite 配置 (端口 3000, /trpc 代理到 3002)
 └── package.json
 ```
 
@@ -178,7 +240,8 @@ export const appRouter = router({
 | `DATABASE_URL` | 数据库连接 | `file:./dev.db` |
 | `JWT_SECRET` | JWT 密钥 | 必填 |
 | `JWT_EXPIRES_IN` | Token 有效期 | `2h` |
-| `PORT` | 服务端口 | `3001` |
+| `REFRESH_TOKEN_EXPIRES_IN` | Refresh Token 有效期 | `7d` |
+| `PORT` | 后端服务端口 | `3002` (dev 脚本中指定) |
 
 ### Database
 
@@ -198,9 +261,12 @@ DATABASE_URL="postgresql://user:password@host:5432/dbname"
 
 | 命令 | 说明 |
 |------|------|
-| `npm run dev` | 启动开发服务器 |
-| `npm run build` | 构建生产版本 |
-| `npm run start` | 启动生产服务器 |
+| `npm run dev` | 同时启动 NestJS 后端 (watch) 和 Vite 前端 |
+| `npm run dev:server` | 仅启动 NestJS 后端（端口 3002，热重载） |
+| `npm run dev:client` | 仅启动 Vite 前端（端口 3000） |
+| `npm run build` | 构建前端生产版本 |
+| `npm run build:server` | 构建后端 (`nest build`) |
+| `npm run start` | 启动生产服务器 (`node dist/main.js`) |
 | `npm run db:push` | 推送数据库结构 |
 | `npm run db:generate` | 生成迁移文件 |
 | `npm run db:migrate` | 运行数据库迁移 |
@@ -222,6 +288,8 @@ DATABASE_URL="postgresql://user:password@host:5432/dbname"
 | TreeView | 树形结构展示 |
 
 ## API Reference
+
+所有业务接口同时提供 **tRPC**（`/trpc`，前端使用）和 **REST**（`/api/*`，见 Swagger 文档 `/api-docs`）两种形态。
 
 ### Authentication
 - `auth.login` - 用户登录
@@ -260,9 +328,19 @@ const { hasPermission, canCreate, canEdit, canDelete } = usePermission()
 </PermissionGuard>
 ```
 
+### REST 接口认证
+
+REST 接口默认受全局 `JwtAuthGuard` 保护，请求需携带 `Authorization: Bearer <token>`。公开接口使用 `@Public()` 装饰器标记：
+
+```typescript
+@Public()
+@Post('login')
+async login(@Body() dto: LoginDto) { ... }
+```
+
 ### 自定义主题
 
-编辑 `tailwind.config.cjs` 自定义颜色、字体等设计令牌。
+项目使用 Tailwind CSS v4（通过 `@tailwindcss/vite` 插件），在 CSS 中通过 `@theme` 自定义颜色、字体等设计令牌。
 
 ## Deployment
 
@@ -272,18 +350,17 @@ const { hasPermission, canCreate, canEdit, canDelete } = usePermission()
 FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 COPY . .
-RUN npm run build
-RUN npx prisma generate
-EXPOSE 3000 3001
+RUN npm run build && npm run build:server
+EXPOSE 3002
 CMD ["npm", "start"]
 ```
 
 ### PM2
 
 ```bash
-npm run build
+npm run build && npm run build:server
 pm2 start npm --name "admin-system" -- start
 ```
 
